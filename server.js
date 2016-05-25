@@ -3,6 +3,7 @@
 var express 	= require('express');
 var app 	= express();			// server
 var https	= require('https');
+var http	= require('http');
 var stylus 	= require('stylus');		// css compiler
 var nib 	= require('nib');		// stylus addon
 var port 	= process.env.PORT || 443;
@@ -64,6 +65,7 @@ app.use('/auth', require('./routes/auth')(passport));
 app.use('/connectwise', require('./routes/connectwise'));
 
 // launch ===================================================================================================
+var httpServer = http.createServer(app).listen(80);
 var server = https.createServer({
 	key: fs.readFileSync('./ssl/server.key'),
 	cert: fs.readFileSync('./ssl/server.crt'),
