@@ -5,7 +5,7 @@ var app 	= express();			// server
 var https	= require('https');
 var stylus 	= require('stylus');		// css compiler
 var nib 	= require('nib');		// stylus addon
-var port 	= process.env.PORT || 8080;
+var port 	= process.env.PORT || 443;
 var fs		= require('fs');
 
 var morgan 		= require('morgan');	// logging
