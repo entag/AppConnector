@@ -1,0 +1,10 @@
+h1 Add New User
+form(role='form', action='auth/register', method='post')
+	.form-group
+		label email
+		input(type='text', name='email').form-control
+	.form-group
+		label password
+		input(type='password', name='password').form-control
+	.form-group
+	input(type='submit', value='submit').btn.btn-default

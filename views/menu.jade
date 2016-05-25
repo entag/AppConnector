@@ -1,0 +1,27 @@
+nav.navbar.navbar-default
+	.container-fluid
+		.navbar-header
+			a.navbar-brand(href='#') Entag Partner Portal
+		ul.nav.navbar-nav
+			if user
+				li
+					a(href='#') New Order
+		ul.nav.navbar-nav.navbar-right
+			unless user
+				li
+					a(href='#')
+						span.glyphicon.glyphicon-user
+						span Sign Up
+				li
+					a(href='#')
+						span.glyphicon.glyphicon-log-in
+						span Login
+			else
+				li
+					a(href='#')
+						span.glyphicon.glyphicon-user
+						span #{user.userId}
+				li
+					a(href='#')
+						span.glyphicon.glyphicon-log-out
+						span Log Out

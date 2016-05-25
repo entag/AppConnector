@@ -1,0 +1,13 @@
+.panel.panel-default
+	.panel-body
+		h2 Log In
+		form(role='form', action='auth/signin', method='post', id='login')
+			.form-group
+				label Email
+				input(name='email', type='text').form-control
+			.form-group
+				label Password
+				input(name='password', type='password').form-control
+			.form-group
+			button(type='submit').btn.btn-default Log In
+			

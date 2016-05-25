@@ -1,0 +1,144 @@
+var request = require('request')
+var auth = require('../config/connectwise');
+var base64 = require('base64-js');
+var utf8 = require('utf8');
+
+var publicKey = auth.publicKey;
+var privateKey = auth.privateKey;
+var organisation = auth.organisation;
+var authString = utf8.encode(organisation + '+' + publicKey + ':' + privateKey);
+var encodedAuth = base64.fromByteArray(map(authString, function(char){return char.charCodeAt(0)}));
+
+//helpers
+function map (arr, callback) {
+  var res = []
+  var kValue, mappedValue
+
+  for (var k = 0, len = arr.length; k < len; k++) {
+    if ((typeof arr === 'string' && !!arr.charAt(k))) {
+      kValue = arr.charAt(k)
+      mappedValue = callback(kValue, k, arr)
+      res[k] = mappedValue
+    } else if (typeof arr !== 'string' && k in arr) {
+      kValue = arr[k]
+      mappedValue = callback(kValue, k, arr)
+      res[k] = mappedValue
+    }
+  }
+  return res
+}
+
+var connectwise = {
+	header: {
+		'Authorization': 'Basic ' + encodedAuth
+	},
+	url: 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0/',
+};
+module.exports = connectwise;
+
+connectwise.getTicket = function(id, callback) {
+	console.log('fetching ticket from ' + this.url + 'service/tickets/' + id);
+	console.log(authString);
+	request({
+		url: this.url + 'service/tickets/' + id,
+		header: {
+			Authorization: 'Basic ' + encodedAuth 
+			}
+		}, function (error, response, body){
+			if(error) {
+				console.log(error)
+			} else callback(response.statusCode, body)
+		});
+}
+
+connectwise.getAllTickets = function(callback) {
+	request({
+		url: this.url + 'service/tickets/',
+		headers: this.header,
+		method: 'GET'
+		}, function(error, response, body) {
+			if(error) {
+				console.log(error)
+			} else {
+				callback(response.statusCode, body)
+			}
+	})
+}
+
+connectwise.updateTicket = function(id, operations, callback) {
+	request({
+		url: this.url + 'service/tickets/',
+		headers: this.header,
+		method: 'PATCH',
+		data: JSON.stringify(operations)
+		}, function(error, request, body) {
+			if(error) {
+				console.log(error)
+			} else {
+				callback(request.statusCode, body)
+			}
+	})
+}
+
+connectwise.replaceTicket = function(id, ticket, callback) {
+	request({
+		url: this.url + 'service/tickets/' + id,
+		headers: this.header,
+		method: 'PUT',
+		data: JSON.stringify(ticket)
+		}, function(error, request, body) {
+			if(error) {
+				console.log(error)
+			} else {
+				callback(request.statusCode, body)
+			}
+	})
+}
+
+connectwise.createTicket = function(ticket, callback) {
+	request({
+		url: 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0/service/tickets',
+		headers: this.header,
+		method: 'POST',
+		data: JSON.parse(ticket)
+	},
+	function(error, response, body){
+		if(error) {
+			console.log(error);
+		} else {
+			callback(response.statusCode, body)
+		}
+	})
+}
+
+connectwise.getContact = function(id, callback) {
+	request({
+		url: this.url + 'company/contacts/' + id,
+		headers: this.header,
+		method: 'GET'
+		},
+		function(error, response, body){
+			if(error) {
+				console.log(error)
+			} else {
+				callback(response.statusCode, body)
+			}
+		})
+	}
+
+connectwise.newContact = function(contact, callback) {
+	request({
+		url: this.url + 'company/contacts/',
+		headers: this.header,
+		method: 'POST',
+		data: JSON.strigify(contact)
+		},
+		function(error, response, body) {
+			if(error) {
+				console.log(error)
+			} else {
+				callback(response.statusCode, body)
+			}
+		})
+}
+

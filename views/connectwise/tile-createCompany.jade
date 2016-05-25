@@ -1,0 +1,16 @@
+.panel.panel-default
+	.panel-heading
+		p Create Company
+	.panel-body
+		form(role='form', action='/connectwise/createCompany', method='POST')
+			.form-group
+				label Name
+				input(type='text', name='name').form-control
+			.form-group
+				label Identifier
+				input(type='text', name='identifier').form-control
+			.form-group
+				label Address
+				input(type='text', name='addressLine1').form-control
+			.form-group
+			button(type='submit').btn.btn-default Create

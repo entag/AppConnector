@@ -1,0 +1,13 @@
+.panel.panel-default
+	.panel-heading
+		p Create Contact
+	.panel-body
+		form(role='form', method='post', action='/connectwise/createContact')
+			.form-group
+				label First Name
+				input(type='text', name='firstName').form-control
+			.form-group
+				label Last Name
+				input(type='text', name='lastName').form-control
+			.form-group
+			button(type='submit').btn.btn-default Create

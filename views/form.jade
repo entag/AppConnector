@@ -1,0 +1,107 @@
+extend layout
+block content
+	form(role='form')
+		h1 Apps Marketplace Order
+		.divider
+		h2 Company Details
+
+		.form-group
+			label Company/Sole Trader Name 
+			input.form-control(type='text' id='name')
+		.form-group
+			label ABN/ACN
+			input.form-control(type='text' id='abn')
+		.form-group
+			label Company Address
+			input.form-control(type='text' id='address')
+		.form-group
+			label Company City/Suburb
+			input.form-control(type='text' id='suburb')
+		.form-group
+			label Company State
+			input.form-control(type='text' id='state')
+		.form-group
+			label Company Postcode
+			input.form-control(type='text' id='postcode')
+		.form-group
+			label Billing Account Number
+			input.form-control(type='text' id='account')
+		.divider
+
+		h2 User Contact Details
+		.form-group
+			label Authorised on Telstra Account?
+			input.form-control(type='text' id='authorised')
+		.form-group
+			label First Name
+			input.form-control(type='text' id='contact-first')
+		.form-group
+			label Last Name
+			input.form-control(type='text' id='contact-last')
+		.form-group
+			label Email
+			input.form-control(type='text' id='contact-email')
+		.form-group
+			label Phone Number
+			input.form-control(type='text' id='contact-phone')
+		.divider
+
+		h2	Technical Contact Details
+		.form-group
+			label As Above?
+			input.form-control(type='text' id='technical-asabove')
+		.form-group
+			label First Name
+			input.form-control(type='text' id='technical-first')
+		.form-group
+			label Last Name
+			input.form-control(type='text' id='technical-last')
+		.form-group
+			label Email
+			input.form-control(type='text' id='technical-email')
+		.form-group
+			label Phone Number
+			input.form-control(type='text' id='technical-phone')
+		.divider
+		
+		h2 TBC Rep
+		.form-group
+			label Employee Number
+			input.form-control(type='text' id='tbc-number')
+		.form-group
+			label First Name
+			input.form-control(type='text' id='tbc-first')
+		.form-group
+			label Last Name
+			input.form-control(type='text' id='tbc-last')
+		.form-group
+			label Email
+			input.form-control(type='text' id='tbc-email')
+		.divider
+				
+		h2 Solutions
+		.form-group
+			textarea.form-control(rows='5' id='sol')
+		.divider
+
+		h2 Approval
+		.form-group
+			label First Name
+			input.form-control(type='text' id='app-first')
+		.form-group
+			label Last Name
+			input.form-control(type='text' id='app-last')
+		.form-group
+			label Position
+			input.form-control(type='text' id='app-position')
+		.form-group
+			label Date
+			input.form-control(type='text' id='app-date')
+		.form-group
+			label Signature
+			textarea.form-control(rows='5' id='app-signature')
+		.divider
+
+		.form-group
+		button(class='btn btn-block btn-lg btn-default') submit
+			

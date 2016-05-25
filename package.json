@@ -1,0 +1,37 @@
+{
+  "name": "AppConnector",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/entag/AppConnector"
+  },
+  "author": "Josh McGillivray/Bryton Wishart",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/entag/AppConnector/issues"
+  },
+  "dependencies": {
+    "express": "~4.13.4",
+    "pdfreader": "~0.1.4",
+    "jade": "~1.11.0",
+    "stylus": "~0.54.5",
+    "nib": "~1.1.0",
+    "passport": "~0.3.2",
+    "morgan": "~1.7.0",
+    "cookie-parser": "~1.4.1",
+    "express-session": "~1.13.0",
+    "express-session-documentdb": "~0.1.2",
+    "documentdb": "~1.7.0",
+    "async": "~2.0.0-rc.5",
+    "crypto": "0.0.3",
+    "passport-local": "~1.0.0",
+    "request": "~2.72.0",
+    "base64-js": "~1.1.2",
+    "utf8": "~2.1.1"
+  }
+}

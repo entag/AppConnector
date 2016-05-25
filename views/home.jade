@@ -1,0 +1,38 @@
+extends ./home_layout.jade
+
+block append css
+	link(rel='stylesheet', href='css/home.css')
+
+block menu
+	include ./menu.jade
+
+block bottomRight
+	unless user
+		include ./tile_register.jade
+	if user && user.userId ==='admin'
+		include ./connectwise/tile-getCompanies.jade
+
+block bottomCenter
+	if user && user.userId ==='admin'
+		include ./connectwise/tile-createCompany.jade
+
+block bottomLeft
+	if user && user.userId ==='admin'
+		include ./connectwise/tile-createContact.jade
+
+block topLeft
+	if user && user.userId === 'admin'
+		include ./tile_addUser.jade
+	else
+		include ./tile_featured.jade
+
+block topRight
+	if user && user.userId === 'admin'
+		include ./connectwise/tile-getTicket.jade
+	else
+		include ./tile_signin.jade
+
+block footer
+	include ./footer.jade
+
+include ./connectwise/tile-getTicket.jade

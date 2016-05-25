@@ -1,0 +1,9 @@
+.panel.panel-default
+	.panel-heading Get Ticket
+	.panel-body
+		form(role='form', action='connectwise/getTicket', method='post')
+			.form-group
+				label Ticket ID
+				input(type='text', name='ticketID').form-control
+			.form-group
+			button(type='submit').btn.btn-default Get Ticket

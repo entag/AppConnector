@@ -1,0 +1,28 @@
+//- home_layout.jade
+doctype html
+html
+	head
+		title Entag Partner Portal
+		block css
+			link(rel='stylesheet', 
+				href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
+	body
+		.container-fluid.no-padding
+			.row-fluid
+				block menu
+		.container
+			.row
+				.col-md-8
+					block topLeft
+				.col-md-4
+					block topRight
+			.row
+				.col-md-4
+					block bottomLeft
+				.col-md-4
+					block bottomCenter
+				.col-md-4
+					block bottomRight
+			.row-fluid
+				.col-md-12
+					block footer
