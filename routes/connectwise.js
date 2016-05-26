@@ -1,5 +1,5 @@
 var router = require('express').Router();
-var controller = require('../controllers/connectwise');
+var connectwise = require('../controllers/connectwise');
 
 router.post('/getTicket', function(req, res, next) {
 	var id = req.body.ticketID;
@@ -12,19 +12,24 @@ router.post('/getTicket', function(req, res, next) {
 })
 
 router.get('/getCompanies', function(req, res, next) {
-	console.log('getting companies')
-	controller.getCompanies(function(code, body) {
-		return res.send(code, body)
-	})
+	res.end(connectwise.api({
+		api: 'company',
+		path: 'companies',
+		method: 'GET'
+	}, null,
+	function(statusCode, body) {
+		console.log(body)
+	}))
 })
 
 router.post('/createCompany', function(req, res, next) {
-	controller.createCompany({
-		identifier: req.body.identifier,
-		name: req.body.name,
-		address: req.body.address,
-	}, function(code, body) {
-		return res.send(code, body)
+	api({
+		api: 'company',
+		path: 'companies',
+		method: 'POST'
+		}, req.body,
+		function(statusCode, body) {
+			console.log(statusCode + ' ' + body)
 	})
 })
 

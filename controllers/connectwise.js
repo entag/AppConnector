@@ -9,7 +9,7 @@ var organisation = auth.organisation;
 var authString = utf8.encode(organisation + '+' + publicKey + ':' + privateKey);
 var encodedAuth = base64.fromByteArray(map(authString, function(char){return char.charCodeAt(0)}));
 
-//helpers
+//helper functions
 function map (arr, callback) {
   var res = []
   var kValue, mappedValue
@@ -29,11 +29,63 @@ function map (arr, callback) {
 }
 
 var connectwise = {
+	baseUrl: 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0/',
 	header: {
 		'Authorization': 'Basic ' + encodedAuth
-	},
-	url: 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0/',
+		}
 };
+
+/**
+*	create an aysnchronus request against the connectwise api
+*	@param {object} options - request options
+*	@param {string} options.api - the api to call against
+*	@param {string} options.path - the path to call against from the selected api
+*	@param {string} options.method - the request method
+*	@param {object} data - the javascript object to be sent
+*	@param {function} [callback] - function to be called if the request is successful
+*	@returns {object}
+**/
+connectwise.api = function (options, data, callback) {
+	var url = this.baseUrl + options.api + '/' + options.path;
+	console.log('url:' + url);
+	console.log('header: ' + JSON.stringify(this.header));
+	console.log('data:' + JSON.stringify(data));
+	console.log('method: ' + options.method);
+	if(callback) {
+		console.log('callback: true')
+	} else console.log('callback: false');
+	switch (options.method) {
+		case 'POST':
+			console.log('posting');
+			request({
+				url: url,
+				header: this.header,
+				json: data,
+				method: options.method
+				}, checkResponse())
+		case 'GET':
+			console.log('getting');
+			request({
+				url: url,
+				header: this.header,
+				method: options.method
+				}, function(error, response, body) {
+					console.log(body)
+				})
+	}
+	
+	function checkResponse(error, response, body, callback) {
+		console.log(body);
+		if (error) {
+			console.log(error)
+		} else {
+			if (callback) {
+				callback(response.statusCode, body)
+			} else return body
+		}
+	}
+}
+
 module.exports = connectwise;
 
 connectwise.getTicket = function(id, callback) {
@@ -158,21 +210,6 @@ connectwise.getCompanies = function(callback){
 		})
 }
 
-connectwise.createCompany = function(company, callback){
-	console.log(json);	
-	request({
-		url: this.url + 'company/companies',
-		method: 'POST',
-		headers: this.header,
-		json: company 
-		}, function(error, response, body) {
-			if(error) {
-				console.log(error)
-			} else {
-				callback(response.statusCode, body)
-			}
-		})
-}
 	
 connectwise.createContact = function(contact, callback) {
 	var json = JSON.stringify(contact, null, '\t');

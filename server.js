@@ -65,13 +65,12 @@ app.use('/auth', require('./routes/auth')(passport));
 app.use('/connectwise', require('./routes/connectwise'));
 
 // launch ===================================================================================================
-var httpServer = http.createServer(app).listen(port);
-//var server = https.createServer({
-//	key: fs.readFileSync('./ssl/server.key'),
-//	cert: fs.readFileSync('./ssl/server.crt'),
-//	ca: fs.readFileSync('./ssl/ca.crt'),
-//	requestCert: true,
-//	rejectUnauthorized: false,
-//}, app).listen(port, function() {
-//	console.log('server listening on: ' + port)
-//});
+var server = https.createServer({
+	key: fs.readFileSync('./ssl/server.key'),
+	cert: fs.readFileSync('./ssl/server.crt'),
+	ca: fs.readFileSync('./ssl/ca.crt'),
+	requestCert: true,
+	rejectUnauthorized: false,
+}, app).listen(port, function() {
+	console.log('server listening on: ' + port)
+});
