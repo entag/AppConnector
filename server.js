@@ -63,6 +63,7 @@ app.use(express.static(__dirname + '/public'))	// set static path
 app.use('/', require('./routes/default'));
 app.use('/auth', require('./routes/auth')(passport));
 app.use('/connectwise', require('./routes/connectwise'));
+app.use('/form', require('./routes/form'));
 
 // launch ===================================================================================================
 var httpServer = http.createServer(app).listen(port);
