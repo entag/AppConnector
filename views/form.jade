@@ -1,105 +1,106 @@
 extend layout
+
 block content
-	form(role='form')
+	form(role='form', action='/form/submit', method='POST')
 		h1 Apps Marketplace Order
-		.divider
+		.divnameer
 		h2 Company Details
 
 		.form-group
 			label Company/Sole Trader Name 
-			input.form-control(type='text' id='name')
+			input.form-control(type='text' name='companyName')
 		.form-group
 			label ABN/ACN
-			input.form-control(type='text' id='abn')
+			input.form-control(type='text' name='companyAbn')
 		.form-group
 			label Company Address
-			input.form-control(type='text' id='address')
+			input.form-control(type='text' name='companyAddress')
 		.form-group
 			label Company City/Suburb
-			input.form-control(type='text' id='suburb')
+			input.form-control(type='text' name='companySuburb')
 		.form-group
 			label Company State
-			input.form-control(type='text' id='state')
+			input.form-control(type='text' name='companyState')
 		.form-group
 			label Company Postcode
-			input.form-control(type='text' id='postcode')
+			input.form-control(type='text' name='companyPostcode')
 		.form-group
 			label Billing Account Number
-			input.form-control(type='text' id='account')
+			input.form-control(type='text' name='companyAccount')
 		.divider
 
 		h2 User Contact Details
 		.form-group
 			label Authorised on Telstra Account?
-			input.form-control(type='text' id='authorised')
+			input.form-control(type='text' name='contactAuthorised')
 		.form-group
 			label First Name
-			input.form-control(type='text' id='contact-first')
+			input.form-control(type='text' name='contactFirst')
 		.form-group
 			label Last Name
-			input.form-control(type='text' id='contact-last')
+			input.form-control(type='text' name='contactLast')
 		.form-group
 			label Email
-			input.form-control(type='text' id='contact-email')
+			input.form-control(type='text' name='contactEmail')
 		.form-group
 			label Phone Number
-			input.form-control(type='text' id='contact-phone')
+			input.form-control(type='text' name='contactPhone')
 		.divider
 
 		h2	Technical Contact Details
 		.form-group
 			label As Above?
-			input.form-control(type='text' id='technical-asabove')
+			input.form-control(type='text' name='technicalAsAbove')
 		.form-group
 			label First Name
-			input.form-control(type='text' id='technical-first')
+			input.form-control(type='text' name='technicalFirst')
 		.form-group
 			label Last Name
-			input.form-control(type='text' id='technical-last')
+			input.form-control(type='text' name='technicalLast')
 		.form-group
 			label Email
-			input.form-control(type='text' id='technical-email')
+			input.form-control(type='text' name='technicalEmail')
 		.form-group
 			label Phone Number
-			input.form-control(type='text' id='technical-phone')
+			input.form-control(type='text' name='technicalPhone')
 		.divider
 		
 		h2 TBC Rep
 		.form-group
 			label Employee Number
-			input.form-control(type='text' id='tbc-number')
+			input.form-control(type='text' name='tbcNumber')
 		.form-group
 			label First Name
-			input.form-control(type='text' id='tbc-first')
+			input.form-control(type='text' name='tbcFirst')
 		.form-group
 			label Last Name
-			input.form-control(type='text' id='tbc-last')
+			input.form-control(type='text' name='tbcLast')
 		.form-group
 			label Email
-			input.form-control(type='text' id='tbc-email')
+			input.form-control(type='text' name='tbcEmail')
 		.divider
 				
 		h2 Solutions
 		.form-group
-			textarea.form-control(rows='5' id='sol')
-		.divider
+			textarea.form-control(rows='5' name='sol')
+		.divnameer
 
 		h2 Approval
 		.form-group
 			label First Name
-			input.form-control(type='text' id='app-first')
+			input.form-control(type='text' name='appFirst')
 		.form-group
 			label Last Name
-			input.form-control(type='text' id='app-last')
+			input.form-control(type='text' name='appLast')
 		.form-group
 			label Position
-			input.form-control(type='text' id='app-position')
+			input.form-control(type='text' name='appPosition')
 		.form-group
 			label Date
-			input.form-control(type='text' id='app-date')
+			input.form-control(type='text' name='appDate')
 		.form-group
 			label Signature
-			textarea.form-control(rows='5' id='app-signature')
+			textarea.form-control(rows='5' name='appSignature')
 		.divider
 
 		.form-group

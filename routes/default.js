@@ -23,7 +23,4 @@ router.get('/register', function(req, res) {
 	res.render('register');
 })
 
-router.get('/form', function(req, res) {
-	res.render('form');
-})
 module.exports = router;
