@@ -36,4 +36,19 @@ router.post('/createContact', function(req, res, next) {
 		return res.send(code, body)
 	})
 });
+
+router.post('/createProject', function(req, res, next) {
+	controller.createProject(req.body, function(code, body) {
+		return res.send(code, body)
+	})
+});
+
+router.get('/getProjects', function(req, res, next) {
+	controller.getBoards(function(code, body) {
+		for(var i=0; i<body.length; i++) {
+			console.log(body[i].name)
+		}
+		return res.send(code, body)
+	})
+})
 module.exports = router

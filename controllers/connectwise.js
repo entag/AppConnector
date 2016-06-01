@@ -128,12 +128,12 @@ connectwise.getContact = function(id, callback) {
 		})
 	}
 
-connectwise.newContact = function(contact, callback) {
+connectwise.createContact = function(contact, callback) {
 	request({
 		url: this.url + 'company/contacts/',
 		headers: this.header,
 		method: 'POST',
-		data: JSON.strigify(contact)
+		data: contact
 		},
 		function(error, response, body) {
 			if(error) {
@@ -159,7 +159,6 @@ connectwise.getCompanies = function(callback){
 }
 
 connectwise.createCompany = function(company, callback){
-	console.log(json);	
 	request({
 		url: this.url + 'company/companies',
 		method: 'POST',
@@ -192,4 +191,32 @@ connectwise.createContact = function(contact, callback) {
 		})
 }
 
+connectwise.getBoards = function(callback) {
+	request({
+		url: this.url + 'project/projects',
+		method: 'GET',
+		headers: this.header,
+		}, function(error, response, body) {
+			if(error) {
+				console.log(error)
+			} else {
+				callback(response.statusCode, body)
+			}
+		})
+}
+
+connectwise.createProject = function(project, callback) {
+	request({
+		url: this.url + 'project/projects',
+		method: 'POST',
+		headers: this.header,
+		json: project
+		}, function(error, response, body) {
+			if(error) {
+				console.log(error)
+			} else {
+				callback(response.statusCode, body)
+			}
+		})
+}
 

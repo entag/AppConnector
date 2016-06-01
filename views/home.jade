@@ -28,7 +28,7 @@ block topLeft
 
 block topRight
 	if user && user.userId === 'admin'
-		include ./connectwise/tile-getTicket.jade
+		include ./connectwise/tile-getBoards.jade
 	else
 		include ./tile_signin.jade
 
