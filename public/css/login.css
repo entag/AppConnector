@@ -16,7 +16,7 @@ body {
 .panel-footer {
   background-color: #ff1744;
 }
-.panel-heading > img {
+img.brand {
   height: 32pt;
 }
 .brand {

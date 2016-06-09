@@ -1,16 +1,15 @@
-.panel.panel-default.login-form
-	.panel-heading
-		img(src='/image/entagwhite.png')
-	.panel-body
+.z-depth-1.card
+	.card-content
+		span.card-title
+			img(src='/image/entagwhite.png').brand
 		form(action='auth/signin', method='POST')
-			.form-group
-				label Email
-				input(type='text', name='email').form-control
-			.form-group
-				label Password
-				input(type='password', name='password').form-control
-			.form-group
+			.input-field
+				input(type='text', name='email', id='email').form-control
+				label(for='email') Email
+			.input-field
+				input(type='password', name='password', id='password').form-control
+				label(for='password') Password
+			.input-field
 				a(href='#') Forgot your password?
-				button(type='submit') Login
-	.panel-footer
+				button(type='submit').btn Login
 		
