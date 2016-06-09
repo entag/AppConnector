@@ -57,7 +57,7 @@ module.exports = function(passport) {
         });
     });
 
-    router.post('/signout', function(req, res, next){
+    router.get('/signout', function(req, res, next){
         req.logout();
         res.json(200, {});
     });

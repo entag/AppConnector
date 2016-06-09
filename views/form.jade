@@ -1,7 +1,7 @@
 extend layout
 
 block content
-	form(role='form', action='/form/submit', method='POST')
+	form(role='form', action='/form/test', method='GET')
 		h1 Apps Marketplace Order
 		.divnameer
 		h2 Company Details
@@ -13,16 +13,16 @@ block content
 			label ABN/ACN
 			input.form-control(type='text' name='companyAbn')
 		.form-group
-			label Company Address
+			label Address
 			input.form-control(type='text' name='companyAddress')
 		.form-group
-			label Company City/Suburb
+			label City/Suburb
 			input.form-control(type='text' name='companySuburb')
 		.form-group
-			label Company State
+			label State
 			input.form-control(type='text' name='companyState')
 		.form-group
-			label Company Postcode
+			label Postcode
 			input.form-control(type='text' name='companyPostcode')
 		.form-group
 			label Billing Account Number
@@ -31,8 +31,10 @@ block content
 
 		h2 User Contact Details
 		.form-group
-			label Authorised on Telstra Account?
-			input.form-control(type='text' name='contactAuthorised')
+			div.checkbox
+				label
+					input(type='checkbox' name='contactAuthorised')
+					span Authorized on Telstra account?
 		.form-group
 			label First Name
 			input.form-control(type='text' name='contactFirst')
@@ -49,8 +51,10 @@ block content
 
 		h2	Technical Contact Details
 		.form-group
-			label As Above?
-			input.form-control(type='text' name='technicalAsAbove')
+			div.checkbox
+				label
+					input(type='checkbox' name='technicalAsAbove')
+					span As above?`
 		.form-group
 			label First Name
 			input.form-control(type='text' name='technicalFirst')

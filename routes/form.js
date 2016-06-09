@@ -1,6 +1,16 @@
 var router = require('express').Router();
 var controller = require('../controllers/connectwise');
+var Q = require('q');
 module.exports = router;
+
+function checkExists(collection, item, parameter, callback) {
+	for(var i=0; i<collection.length; i++) {
+		if(collection[i][paramter] == item[parameter]) {
+			callback(collection[i]);	
+		}
+	}
+	return false
+}
 
 router.get('/', function(req, res) {
 	if(!req.isAuthenticated()) {
@@ -10,38 +20,74 @@ router.get('/', function(req, res) {
 	res.render('form')
 });
 
+router.get('/test', function(req, res) {
+});
+
 router.post('/submit', function(req, res) {
 	if(!req.isAuthenticated()) {
 		res.redirect('/')
 	}
-	var data = req.body;	
+	
+	var allData = Q.all([
+		controller.asyncRequest({		//get all companies
+			url: 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0/company/companies',
+			method: 'GET'
+		}),
+		controller.asyncRequest({		//get all contacts
+			url: 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0/company/contacts',
+			method: 'GET'
+		}),
+		controller.asyncRequest({		//get all projects
+			url: 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0/project/projects',
+			method: 'GET'
+		})
+	])
 
-	var company = {};
-	company.name = data.companyName;
-	company.identifier = data.companyName;
-	company.addressLine1 = data.companyAddress;
-	company.status = {
-		name: 'Active'
-	}
-	company.type = {
-		name: 'Client'
-	}
-	company.metadata = {
-		abn: data.companyAbn,
-		citySuburb: data.companySuburb,
-		state: data.companyState,
-		postcode: data.companyPostcode,
-		billingACN: data.companyAccount
-	};
+	allData.then(function(allData) {
+		var companies = allData[0],
+		contacts = allData[1];
 
-	var contact = {};
-	contact.id = 0;
-	contact.firstName = data.contactFirst;
-	contact.lastName = data.contactLast;
-	contact.metadata = {
-		email: data.contactEmail,
-		phone: data.contactPhone
-	}
+		var company = {			//create company
+			name: data.companyName,
+			identifier: data.companyName,
+			addressLine1: data.companyAddress,
+			status: {
+				name: 'Active'
+			},
+			type: {
+				name: 'Client'
+			},
+			metadata: {
+				abn: data.companyAbn,
+				citySuburb: data.companySuburb,
+				state: data.companyState,
+				postcode: data.companyPostcode,
+				billingACN: data.companyAccount
+			},
+		};
+		
+		var contact = {
+			firstName: data.contactFirst,
+			lastName: data.contactLast,
+			email: data.contactEmail,
+			phone: data.contactPhone
+		};
+
+		checkExists(companies, company, 'name', 
+			function(item) { // duplicate exits
+				Object.assign(true, item, company);
+				company = item;
+			},
+			function(item) {	// no duplicate
+				
+			});
+
+		checkExists(contact, contact, 'email', function(item) {
+			Object.assign(true, item, contact)
+			contact = item;
+			// save modified contact to db
+		});
+	})
 
 	var project = {}
 	project.name = company.name;

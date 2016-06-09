@@ -2,7 +2,6 @@ var request = require('request')
 var auth = require('../config/connectwise');
 var base64 = require('base64-js');
 var utf8 = require('utf8');
-var Q = require('q');
 
 var publicKey = auth.publicKey;
 var privateKey = auth.privateKey;
@@ -29,30 +28,42 @@ function map (arr, callback) {
   return res
 }
 
-var connectwise = {
-	header: {
-		'Authorization': 'Basic ' + encodedAuth
-	},
-	url: 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0/',
-};
+var connectwise = function() {
+	console.log('///connectwise///');
+	console.log('public key: ' + publicKey);
+	console.log('private key: ' + privateKey);
+	console.log('organisation: ' + organisation);
+	console.log('encoded auth: ' + encodedAuth);
+
+	this.header = {'Authorization': 'Basic ' + encodedAuth};
+	this.url = 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0';
+}
+
 module.exports = connectwise;
 
-connectwise.asyncRequest = function(options) {
-	console.log('async request');
-	var deferred = Q.defer();
-	options.headers = this.header;
-	request(options, function(error, response, body) {
-		if(error) {deferred.reject(error)}
-		else {
-			var res = {
-				code: response.statusCode,
-				body: body
-			}
-			deferred.resolve(res)
-		}
-	})
-	return deferred.promise;
+connectwise.prototype.api = function(url, options, callback) {
+	switch(options.method){
+		case 'POST':
+			request.post({
+				url: this.url + url,
+				header: this.header,
+				json: options.json
+				}, callback(error, response, body))
+		case 'GET':
+			var t = this.url + url;
+			if(options.json) {t += options.json}
+			request({
+				url: t,
+				header: this.header,
+				method: options.method
+				}, function(error, response, body) {
+					console.log(t + ': ' + response.statusCode);
+					if(options.json){console.log(options.json)}
+					callback(error, response, body)
+				})
+	}
 }
+
 
 connectwise.getTicket = function(id, callback) {
 	console.log('fetching ticket from ' + this.url + 'service/tickets/' + id);
@@ -209,7 +220,7 @@ connectwise.createContact = function(contact, callback) {
 		})
 }
 
-connectwise.getBoards = function(callback) {
+connectwise.prototype.getBoards = function(callback) {
 	request({
 		url: this.url + 'project/projects',
 		method: 'GET',

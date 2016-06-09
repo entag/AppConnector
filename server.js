@@ -66,7 +66,10 @@ app.use('/connectwise', require('./routes/connectwise'));
 app.use('/form', require('./routes/form'));
 
 // launch ===================================================================================================
-var httpServer = http.createServer(app).listen(port);
+var httpServer = http.createServer(app);
+httpServer.listen(8080, function() {
+	console.log('server listening on: 8080');
+})
 //var server = https.createServer({
 //	key: fs.readFileSync('./ssl/server.key'),
 //	cert: fs.readFileSync('./ssl/server.crt'),

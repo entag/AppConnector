@@ -1,0 +1,16 @@
+.panel.panel-default.login-form
+	.panel-heading
+		img(src='/image/entag.png')
+	.panel-body
+		form(action='auth/login', method='POST')
+			.form-group
+				label Email
+				input(type='text', name='email').form-control
+			.form-group
+				label Password
+				input(type='password', name='password').form-control
+			.form-group
+				a(href='#') Forgot your password?
+				button(type='submit') Login
+	.panel-footer
+		

@@ -6,7 +6,7 @@ var router = require('express').Router();
 router.get('/', function (req, res) {
 	if(req.isAuthenticated()) {
 		if(req.user.userId === 'admin') {
-			res.render('home', {
+			res.render('login', {
 				"user": req.user
 			})
 		} else {
