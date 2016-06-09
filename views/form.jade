@@ -20,21 +20,24 @@ block content
 			input.form-control(type='text' name='companySuburb')
 		.form-group
 			label State
-			input.form-control(type='text' name='companyState')
+			select.form-control(type='text' name='companyState')
+				option(value='Queensland') Queensland
+				option(value='New South Wales') New South Wales
+				option(value='Victoria') Victoria
+				option(value='Australian Capital Territory') Australian Capital Territory
+				option(value='South Australia') South Australia
+				option(value='Western Australia') Western Australia
+				option(value='Northern Territory') Northern Territory
+				option(value='Tasmania') Tasmania
 		.form-group
 			label Postcode
 			input.form-control(type='text' name='companyPostcode')
 		.form-group
-			label Billing Account Number
+			label Telstra Account Number
 			input.form-control(type='text' name='companyAccount')
 		.divider
 
-		h2 User Contact Details
-		.form-group
-			div.checkbox
-				label
-					input(type='checkbox' name='contactAuthorised')
-					span Authorized on Telstra account?
+		h2 Primary Contact Details
 		.form-group
 			label First Name
 			input.form-control(type='text' name='contactFirst')
@@ -69,10 +72,7 @@ block content
 			input.form-control(type='text' name='technicalPhone')
 		.divider
 		
-		h2 TBC Rep
-		.form-group
-			label Employee Number
-			input.form-control(type='text' name='tbcNumber')
+		h2 Telstra Business Center Rep
 		.form-group
 			label First Name
 			input.form-control(type='text' name='tbcFirst')
@@ -86,10 +86,38 @@ block content
 				
 		h2 Solutions
 		.form-group
-			textarea.form-control(rows='5' name='sol')
-		.divnameer
+			label Software
+			select(id='software').form-control
+				option(value='Box') Box
+				option(value='DocuSign') DocuSign
+				option(value='Shoeboxed') Shoeboxed
+		.form-group
+			label Licence
+			select(id='sol-lic-t').form-control
+				option(id='soleTrader', value='Sole Trader') Sole Trader
+				option(value='Small Business') Small Business
+		.form-group
+			label Licence Quantity
+			select(id='sol-lic-q').form-control
+				option(value='1') 1
+				option(value='2') 2
+				option(value='3') 3
+				option(value='4') 4
+				option(value='5') 5
+				option(value='6') 6
+				option(value='7') 7
+				option(value='8') 8
+				option(value='9') 9
+				option(value='10') 10
+			
+		.divider
 
-		h2 Approval
+		h2 Authorised Telstra Rep
+		.form-group
+			div.checkbox
+				label
+					input(type='checkbox' name='contactAuthorised')
+					span Authorized on Telstra account?
 		.form-group
 			label First Name
 			input.form-control(type='text' name='appFirst')
@@ -110,3 +138,5 @@ block content
 		.form-group
 		button(class='btn btn-block btn-lg btn-default') submit
 			
+block scripts
+	script(type='text/javascript', src='/js/form.js')

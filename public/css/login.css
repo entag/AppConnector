@@ -1,0 +1,42 @@
+@import url("http://fonts.googleapis.com/css?family=Roboto");
+html,
+body {
+  width: 100%;
+  body: 100%;
+}
+.login-form,
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+.panel-default > .panel-heading {
+  background-color: #ff1744;
+}
+.panel-footer {
+  background-color: #ff1744;
+}
+.panel-heading > img {
+  height: 32pt;
+}
+.brand {
+  font-family: 'Roboto';
+}
+.brand > span {
+  font-size: 32pt;
+}
+.e {
+  color: #ff1744;
+}
+.n {
+  color: #2979ff;
+}
+.t {
+  color: #ffc400;
+}
+.a {
+  color: #00e676;
+}
+.g {
+  color: #00afff;
+}
