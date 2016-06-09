@@ -67,8 +67,8 @@ app.use('/form', require('./routes/form'));
 
 // launch ===================================================================================================
 var httpServer = http.createServer(app);
-httpServer.listen(8080, function() {
-	console.log('server listening on: 8080');
+httpServer.listen(PORT, function() {
+	console.log('server listening: ' + PORT);
 })
 //var server = https.createServer({
 //	key: fs.readFileSync('./ssl/server.key'),
