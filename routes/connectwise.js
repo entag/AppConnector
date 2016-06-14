@@ -1,5 +1,7 @@
 var router = require('express').Router();
 var controller = require('../controllers/connectwise');
+var cache = require('../controllers/cache');
+var Q = require('q');
 
 router.post('/getTicket', function(req, res, next) {
 	var id = req.body.ticketID;
@@ -12,12 +14,21 @@ router.post('/getTicket', function(req, res, next) {
 })
 
 router.get('/getCompanies', function(req, res, next) {
-	controller.getCompanies(function(code, body) {
-		return res.send(code, body)
-	})
+	cache.query(
+		'companies',
+		'select *',
+		function(err, result) {
+			if(err) {
+				res.send(500)
+			} else {
+				res.send(200, result)
+			}
+		})
 })
 
 router.post('/createCompany', function(req, res, next) {
+	cache.exists					
+
 	controller.createCompany({
 		identifier: req.body.identifier,
 		name: req.body.name,

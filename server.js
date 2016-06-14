@@ -19,6 +19,7 @@ var DocDB		= require('./models/DocDB');
 var config		= require('./config/database');
 
 var connectwise		= require('./controllers/connectwise');
+var routeAuth		= require('./controllers/routeAuth');
 
 //globals
 docDB = new DocDB(config);
@@ -62,7 +63,8 @@ app.use(express.static(__dirname + '/public'))	// set static path
 // routes ===================================================================================================
 app.use('/', require('./routes/default'));
 app.use('/auth', require('./routes/auth')(passport));
-app.use('/connectwise', require('./routes/connectwise'));
+app.use('/admin', require('./routes/admin'));
+//app.use('/connectwise', require('./routes/connectwise'));
 app.use('/form', require('./routes/form'));
 
 // launch ===================================================================================================

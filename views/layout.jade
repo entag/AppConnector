@@ -2,11 +2,13 @@ doctype html
 html
 	head
 		title #{title}
-		link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css')
+		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css')
 		link(rel='stylesheet', href='/css/form.css')
 	include ./menu.jade
 	body
 		.container
-			.main-content
-				block content
-	block scripts
+			block content
+		script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
+		script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js')
+		script(type='text/javascript', src='/js/common.js')
+		block scripts

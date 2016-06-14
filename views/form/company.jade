@@ -1,0 +1,34 @@
+.row
+	.col.s12.card
+		.card-content
+			span.card-title Company
+			.row
+				.input-field.col.s12
+					input(type='text')#companyName
+					label(for='companyName') Company/Sole Trader Name
+			.row
+				.input-field.col.s12
+					input(type='text')#companyABN
+					label(for='companyABN') ABN/ACN
+			.row
+				.input-field.col.s6
+					input(type='text')#companyAddress
+					label(for='companyAddress') Address
+				.input-field.col.s6
+					input(type='text')#companySuburb
+					label(for='companySuburb') City/Suburb
+			.row
+				.input-field.col.s6
+					input(type='number')#companyPostcode
+					label(for='companyPostcode') Postcode
+				.input-field.col.s6
+					select#companyState
+						option(value='Queensland') Queensland
+						option(value='New South Wales') New South Wales
+						option(value='Victoria') Victoria
+						option(value='Australian Capital Territory') Australian Capital Territory
+						option(value='South Australia') South Australia
+						option(value='Western Australia') Western Australia
+						option(value='Northern Territory') Northern Territory
+						option(value='Tasmania') Tasmania
+					label(for='companyState') State

@@ -3,10 +3,20 @@ html
 	head
 		title Entag ordering system
 		link(rel='stylesheet', href='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.css')
+		link(rel='stylesheet', href='css/login.css')
 		link(rel='icon', type='image/png', href='/image/favicon.png')
-		link(rel='stylesheet', href='/css/login.css')
 	body
 		.container
 			.row
-				.col.m6.offset-m3
-					include ./login-form.jade
+				.col.l6.offset-l3.m12.s12
+					.row
+						.brand
+							span.e e
+							span.n n
+							span.t t
+							span.a a
+							span.g g
+					.row
+						include ./login-form.jade
+	script(type='text/javascript', src='https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js')
+	script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/js/materialize.min.js')

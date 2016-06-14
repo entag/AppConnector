@@ -1,27 +1,13 @@
-nav.navbar.navbar-default
-	.container-fluid
-		.navbar-header
-			a.navbar-brand(href='#') Entag Partner Portal
-		ul.nav.navbar-nav
-			if user
+.navbar-fixed
+	nav
+		.nav-wrapper
+			a.brand-logo(href='#') Entag App Connector
+			ul
 				li
 					a(href='#') New Order
-		ul.nav.navbar-nav.navbar-right
-			unless user
+			ul.right
 				li
-					a(href='#')
-						span.glyphicon.glyphicon-user
-						span Sign Up
-				li
-					a(href='#')
-						span.glyphicon.glyphicon-log-in
-						span Login
-			else
-				li
-					a(href='#')
-						span.glyphicon.glyphicon-user
+					a(href='#') 
 						span #{user.userId}
 				li
-					a(href='/auth/signout')
-						span.glyphicon.glyphicon-log-out
-						span Log Out
+					a(href='/auth/signout') Log out

@@ -1,15 +1,15 @@
-.z-depth-1.card
-	.card-content
-		span.card-title
-			img(src='/image/entagwhite.png').brand
-		form(action='auth/signin', method='POST')
-			.input-field
-				input(type='text', name='email', id='email').form-control
-				label(for='email') Email
-			.input-field
-				input(type='password', name='password', id='password').form-control
-				label(for='password') Password
-			.input-field
-				a(href='#') Forgot your password?
-				button(type='submit').btn Login
+form(action='auth/signin', method='POST').col.s12
+	.row
+		.input-field.col.s12
+			input(type='text', name='email', id='email')
+			label(for='email') Email
+	.row
+		.input-field.col.s12
+			input(type='password', name='password', id='password')
+			label(for='password') Password
+	.row
+		.input-field.col.s9
+			a(href='#') Forgot your password?
+		.input-field.col.s3
+			button(type='submit').btn Login
 		

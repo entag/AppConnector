@@ -17,13 +17,13 @@ body {
   background-color: #ff1744;
 }
 img.brand {
-  height: 32pt;
+  height: 40vh;
 }
 .brand {
   font-family: 'Roboto';
 }
 .brand > span {
-  font-size: 32pt;
+  font-size: 20vh;
 }
 .e {
   color: #ff1744;

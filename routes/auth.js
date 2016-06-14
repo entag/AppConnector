@@ -18,7 +18,10 @@ module.exports = function(passport) {
 	passport.authenticate('local', function(err, user, info){
 		req.login(user, function(err) {
 			if(err){return next(err)}
-			return res.redirect(200, '/')
+			res.writeHeader(301, {
+				Location: (req.socket.encrypted ? 'https://' : 'http://') + req.headers.host
+			})
+			res.end()
 		})
 	})(req, res, next)
     };
@@ -58,8 +61,10 @@ module.exports = function(passport) {
     });
 
     router.get('/signout', function(req, res, next){
-        req.logout();
-        res.json(200, {});
+        //req.logOut();
+	req.logout();
+	//req.session.destroy();
+	res.redirect('/');
     });
 
     router.post('/signin',signin )
