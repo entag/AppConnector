@@ -1,0 +1,26 @@
+.row
+	.col.s12.card
+		.card-content
+			span.card-title Authorised Telstra Representative
+			.row
+				.input-field.col.s12
+					input(type='checkbox')#authConfirm
+					label(for='authConfirm') I confirm that this purchase is authorised on the Telstra account
+			.row
+				.input-field.col.s6
+					input(type='text')#authFirst
+					label(for='authFirst') First Name
+				.input-field.col.s6
+					input(type='text')#authLast
+					label(for='authLast') Last Name
+			.row
+				.input-field.col.s12
+					input(type='text')#authPosition
+					label(for='authPosition') Position
+			.row
+				.input-field.col.s6
+					input(type='text')#authSignature
+					label(for='authSignature') Signature
+				.input-field.col.s6
+					input(type='date').datepicker#authDate
+					label(for='authDate') Date
