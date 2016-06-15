@@ -45,7 +45,8 @@ router.post('/submit', function(req, res) {
 
 	allData.then(function(allData) {
 		var companies = allData[0],
-		contacts = allData[1];
+		contacts = allData[1],
+		projects = allData[2];
 
 		var company = {			//create company
 			name: data.companyName,
