@@ -1,50 +1,81 @@
-var techConSame = document.getElementsByName('technicalAsAbove')[0];
+var software = $('#solutionsSoftware');
+var licence = $('#solutionsLicence');
+var qty = $('#solutionsQty');
 
-techConSame.addEventListener('change', function(e) {
+var techConSame = $('#technicalCopy');
+
+var form = $('#form');
+
+techConSame.on('change', function(e) {
 	var technical = {};
-	technical.first = document.getElementsByName('technicalFirst')[0];
-	technical.last = document.getElementsByName('technicalLast')[0];
-	technical.email = document.getElementsByName('technicalEmail')[0];
-	technical.phone = document.getElementsByName('technicalPhone')[0];
+	technical.first = $('#technicalFirst');
+	technical.last = $('#technicalLast');
+	technical.email = $('#technicalEmail');
+	technical.phone = $('#technicalPhone');
 	
 	var primary = {};
-	primary.first = document.getElementsByName('contactFirst')[0];
-	primary.last = document.getElementsByName('contactLast')[0];
-	primary.email = document.getElementsByName('contactEmail')[0];
-	primary.phone = document.getElementsByName('contactPhone')[0];
+	primary.first = $('#contactFirst');
+	primary.last = $('#contactLast');
+	primary.email = $('#contactEmail');
+	primary.phone = $('#contactPhone');
 
-	if(techConSame.checked) {
-		technical.first.value = primary.first.value;
-		technical.last.value = primary.last.value;
-		technical.email.value = primary.email.value;
-		technical.phone.value = primary.phone.value;
-
-		technical.first.disabled = true;
-		technical.last.disabled = true;
-		technical.email.disabled = true;
-		technical.phone.disabled = true;
+	if(techConSame.is(':checked')) {
+		technical.first.val(primary.first.val())
+		technical.last.val(primary.last.val())
+		technical.email.val(primary.email.val())
+		technical.phone.val(primary.phone.val())
+		technical.first.prop('disabled', true);
+		technical.last.prop('disabled', true);
+		technical.email.prop('disabled', true);
+		technical.phone.prop('disabled', true);
 	} else {
-		technical.first.value = "";
-		technical.last.value = "";
-		technical.email.value = "";
-		technical.phone.value = "";
+		technical.first.prop('disabled', false);
+		technical.last.prop('disabled', false);
+		technical.email.prop('disabled', false);
+		technical.phone.prop('disabled', false);
+		technical.first.val("");
+		technical.last.val("");
+		technical.email.val("");
+		technical.phone.val("");
 	}	
 });
 
-var software = document.getElementById('software');
-software.addEventListener('change', function(e) {
-	if(software.value === 'Shoeboxed') {
-		document.getElementById('sol-lic-t').disabled = true;
+software.on('change', function(e) {
+	if(software.val() == 'Shoeboxed') {
+		licence.prop('disabled', true);
+		licence.val('Sole Trader');
 	} else {
-		document.getElementById('sol-lic-t').disabled = false;
+		licence.prop('disabled', false);
 	}
 });
 
-var licType = document.getElementById('sol-lic-t');
-licType.addEventListener('change', function(e) {
-	if(licType.value === 'Small Business') {
-		document.getElementById('sol-lic-q').disabled = false
+licence.on('change', function(e) {
+	if(licType.val() == 'Small Business') {
+		qty.prop('disabled', false);
 	} else {
-		document.getElementById('sol-lic-q').disabled = true	
+		qty.prop('disabled', true);
+		qty.val('1');
 	}
 });
+
+form.on('submit', function(e) {
+	e.preventDefault();
+	var data = {};
+
+	$('input').each(function() {
+		data[$(this).attr('id')] = $(this).val()
+	})
+
+	$('select').each(function() {
+		data[$(this).attr('id')] = $(this).val()
+	})
+
+	$.ajax({
+		url: '/form/submit',
+		data: data,
+		method: 'POST'
+		})
+		.done(function(res) {
+			console.log(res)
+		})
+})

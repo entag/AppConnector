@@ -1,12 +1,23 @@
 extend layout
 
 block content
+<<<<<<< HEAD
 	include ./form/company.jade
 	include ./form/primaryContact.jade
 	include ./form/technicalContact.jade
 	include ./form/tbc.jade
 	include ./form/solutions.jade
 	include ./form/controls.jade
+=======
+	form(action='form/submit', method='POST')#form
+		include ./form/company.jade
+		include ./form/primaryContact.jade
+		include ./form/technicalContact.jade
+		include ./form/tbc.jade
+		include ./form/solutions.jade
+		include ./form/authorisedRep.jade
+		include ./form/controls.jade
+>>>>>>> josh-merge
 
 block scripts
 	script(type='text/javascript', src='/js/form.js')

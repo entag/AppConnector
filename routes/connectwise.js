@@ -1,6 +1,6 @@
 var router = require('express').Router();
 var controller = require('../controllers/connectwise');
-var cache = require('../controllers/cache');
+var cache = require('../controllers/Cache');
 var Q = require('q');
 
 router.post('/getTicket', function(req, res, next) {
