@@ -2,7 +2,7 @@ var util = require('util');
 var async = require('async');
 var Documentclient = require('documentdb').DocumentClient;
 
-function DocDB(options) {
+function DocDB(options, callback) {
 	var self = this;
 
     self.client = new Documentclient(options.host, { masterKey: options.authKey });
@@ -19,7 +19,10 @@ function DocDB(options) {
         self.readOrCreateCollection(self.db, self.collectionId, function(e, collection) {
             if(!e) {
                 self.collection = collection;
-                self.isReady = true;
+		self.isReady = true;
+		if(callback) {
+		callback();
+		}
             } else {
                 throw e;
             }
@@ -54,6 +57,7 @@ DocDB.prototype.getItem = function (query, callback) {
 // create an item
 DocDB.prototype.addItem = function (item, callback) {
     var self = this;
+	console.log(self.isReady);
 
     self.client.createDocument(self.collection._self, item, function (err, doc) {
         return callback(err, doc);
