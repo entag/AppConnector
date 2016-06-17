@@ -4,7 +4,7 @@ var qty = $('#solutionsQty');
 
 var techConSame = $('#technicalCopy');
 
-var form = $('#form');
+var btn = $('#form-button');
 
 techConSame.on('change', function(e) {
 	var technical = {};
@@ -58,7 +58,7 @@ licence.on('change', function(e) {
 	}
 });
 
-form.on('submit', function(e) {
+btn.on('click', function(e) {
 	e.preventDefault();
 	var data = {};
 

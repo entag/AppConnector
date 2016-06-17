@@ -41,14 +41,12 @@ router.post('/submit', function(req, res) {
 			type: {
 				name: 'Client'
 			},
-			metadata: {
-				abn: data.companyABN,
-				citySuburb: data.companySuburb,
-				state: data.companyState,
-				postcode: data.companyPostcode,
-				billingACN: data.companyAccount
-			},
+			city: data.companySuburb,
+			zip: data.companyPostcode,
+			accountNumber: data.companyABN,
+			telstraACN: data.telstraAccountNumber,
 		};
+		console.log(company);
 		
 		var primary = {
 			firstName: data.contactFirst,
@@ -56,6 +54,7 @@ router.post('/submit', function(req, res) {
 			email: data.contactEmail,
 			phone: data.contactPhone
 		};
+		console.log(primary);
 
 		var technical = {
 			firstName: data.technicalFirst,
@@ -63,17 +62,27 @@ router.post('/submit', function(req, res) {
 			email: data.technicalEmail,
 			phone: data.technicalPhone
 		};
+		console.log(technical);
+
+		var tbc = {
+			firstName: data.tbcFirst,
+			lastName: data.tbcLast,
+			email: data.tbcEmail
+		};
+		console.log(tbc);
 
 		var project = {
 			name: company.name + ' ' + data.soltuionsSoftware,
-			company: company.id,
+			company: {},
 			board: {
 				name: 'Application'
 			},
 			billingMethod: 'FixedFee',
-			estimatedStart: new Date(), //insert current date
-			estimatedEnd: new Date() // '' + 1
+			description: data.solutionsSoftware + ' ' + data.solutionsLicence + ' ' + data.solutionsQty,
+			estimatedStart: '2016-06-17T04:21:07Z', 
+			estimatedEnd: '2016-06-17T04:21:07Z',
 		};
+		console.log(project);
 
 		console.log('created objects');
 		company = cache.matchAndMerge(company, companies, ['identifier']) || company; 
@@ -147,6 +156,28 @@ router.post('/submit', function(req, res) {
 		.then(function(res) {
 			var deferred = Q.defer()
 			technical = res;
+			if(tbc.id) { // update contact
+				contactOperation = controller.asyncRequest({
+				method: 'PUT',
+				url: controller.url + 'company/contacts/' + '{' + contact.id + '}',
+				json: tbc
+				})
+				.then(function(res){deferred.resolve(res)})
+			} else { // post contact
+				contactOperation = controller.asyncRequest({
+				url: controller.url + 'company/contacts',
+				json: tbc,
+				method: 'POST'
+				})
+				.then(function(res){deferred.resolve(res)})
+			}
+			return deferred.promise
+		})			
+
+		.then(function(res) {
+			var deferred = Q.defer()
+			tbc = res;
+			project.company.id = company.id;
 			if(project.id) { //update project
 				controller.asyncRequest({
 					url: controller.url + 'project/projects/' + '{' + project.id + '}',
