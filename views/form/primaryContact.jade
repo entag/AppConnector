@@ -1,19 +1,23 @@
 .row
 	.col.s12.card
 		.card-content
-			span.card-title Primary Contact
+			span.card-title Authorised Telstra Contact
 			.row
 				.input-field.col.s6
-					input(type='text')#contactFirst
+					input(type='text' class='validate')#contactFirst
 					label(for='contactFirst') First Name
 				.input-field.col.s6
-					input(type='text')#contactLast
+					input(type='text' class='validate')#contactLast
 					label(for='contactLast') Last Name
 			.row
 				.input-field.col.s12
-					input(type='text')#contactPhone
+					input(type='number' class='validate')#contactPhone
 					label(for='contactPhone') Phone
 			.row
 				.input-field.col.s12
-					input(type='text')#contactEmail
+					input(type='email' class='validate')#contactEmail
 					label(for='contactEmail') Email
+			.row
+				.input-field.col.s12
+					input(type='checkbox' class='validate')#authConfirm
+					label(for='authConfirm') I confirm that this person is the authorised on the Telstra Account 

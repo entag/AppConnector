@@ -42,13 +42,9 @@ connectwise.asyncRequest = function(options) {
 	var deferred = Q.defer();
 	options.headers = this.header;
 	request(options, function(error, response, body) {
-		if(error) {deferred.reject(error)}
+		if(error) {console.log(error);deferred.reject(error)}
 		else {
-			var res = {
-				code: response.statusCode,
-				body: body
-			}
-			deferred.resolve(res)
+			console.log(body);deferred.resolve(body)
 		}
 	})
 	return deferred.promise;

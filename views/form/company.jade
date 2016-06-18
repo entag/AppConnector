@@ -4,25 +4,26 @@
 			span.card-title Company
 			.row
 				.input-field.col.s12
-					input(type='text')#companyName
+					input(type='text' class='validate')#companyName
 					label(for='companyName') Company/Sole Trader Name
 			.row
 				.input-field.col.s12
-					input(type='text')#companyABN
+					input(type='number' class='validate' maxlength='11')#companyABN
 					label(for='companyABN') ABN/ACN
 			.row
 				.input-field.col.s6
-					input(type='text')#companyAddress
+					input(type='text' class='validate')#companyAddress
 					label(for='companyAddress') Address
 				.input-field.col.s6
-					input(type='text')#companySuburb
+					input(type='text' class='validate')#companySuburb
 					label(for='companySuburb') City/Suburb
 			.row
 				.input-field.col.s6
-					input(type='number')#companyPostcode
+					input(type='number' class='validate' maxlength='4' )#companyPostcode
 					label(for='companyPostcode') Postcode
 				.input-field.col.s6
 					select#companyState
+						option(value="" disabled selected) Select the state
 						option(value='Queensland') Queensland
 						option(value='New South Wales') New South Wales
 						option(value='Victoria') Victoria
@@ -32,3 +33,8 @@
 						option(value='Northern Territory') Northern Territory
 						option(value='Tasmania') Tasmania
 					label(for='companyState') State
+			.row
+				.input-field.col.s12
+					input(type='number' maxlength='13' class='validate')#TelstraAccountNumber
+					label(for='companyTelstraAcc') Telstra Account Number*
+					blockquote *Telstra account number must be a billing flexcab account number 
