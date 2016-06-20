@@ -1,3 +1,3 @@
 module.exports = {
-	doNotPostToConnectwise: true
+	doNotPostToConnectwise: false
 }
