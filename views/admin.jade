@@ -1,7 +1,9 @@
 extend layout
 
 block content
+	include ./usermanagement.jade
 	include ./admin/newuser.jade
+	include ./admin/deleteuser.jade
 	
 block scripts
 	script(type='text/javascript', src='/js/form.js')
