@@ -1,16 +1,16 @@
-		.row	
-			.col.s12.card
-				.card-content
-					span.card-title Add New User
-				.row
-					.input-field.col.s12
-						form(role='form', action='/auth/register', method='POST')
-						input(type='email', name='email' class='validate').form-control
-						label(for='newuser') Username
-				.row
-					.input-field.col.s12
-						input(type='password', name='passowrd').form-control
-				.row
-					.input-field.col.s12
-					input(type='submit', value="Submit").bnt#form-button Add User
+.row	
+	.col.s12.card
+		.card-content
+			span.card-title Add New User
+		.row
+			.input-field.col.s12
+			form(role='form', action='/auth/register', method='POST')
+			input(type='email', name='email' class='validate').form-control
+			label(for='newuser') Username
+		.row
+			.input-field.col.s12
+			input(type='password', name='passowrd').form-control
+		.row
+			.input-field.col.s12
+			input(type='submit', value="Submit").bnt#form-button Add User
 				
