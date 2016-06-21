@@ -1,16 +1,10 @@
 var router = require('express').Router();
 var controller = require('../controllers/connectwise');
+var Cache = require('../controllers/Cache');
 var Q = require('q');
 module.exports = router;
 
-function checkExists(collection, item, parameter, callback) {
-	for(var i=0; i<collection.length; i++) {
-		if(collection[i][paramter] == item[parameter]) {
-			callback(collection[i]);	
-		}
-	}
-	return false
-}
+var cache = new Cache();
 
 router.get('/', function(req, res) {
 	if(!req.isAuthenticated()) {
@@ -24,26 +18,15 @@ router.get('/test', function(req, res) {
 });
 
 router.post('/submit', function(req, res) {
-	if(!req.isAuthenticated()) {
-		res.redirect('/')
-	}
-	
-	var allData = Q.all([
-		controller.asyncRequest({		//get all companies
-			url: 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0/company/companies',
-			method: 'GET'
-		}),
-		controller.asyncRequest({		//get all contacts
-			url: 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0/company/contacts',
-			method: 'GET'
-		}),
-		controller.asyncRequest({		//get all projects
-			url: 'https://api-au.myconnectwise.net/v4_6_release/apis/3.0/project/projects',
-			method: 'GET'
-		})
+	var data = req.body;
+	console.log(data);
+	Q.all([
+		cache.query('companies', 'select * from root r'),
+		cache.query('contacts', 'select * from root r'),
+		cache.query('projects', 'select * from root r')	
 	])
-
-	allData.then(function(allData) {
+	.then(function(allData) {
+		console.log('alldata loaded');
 		var companies = allData[0],
 		contacts = allData[1],
 		projects = allData[2];
@@ -58,62 +41,197 @@ router.post('/submit', function(req, res) {
 			type: {
 				name: 'Client'
 			},
-			metadata: {
-				abn: data.companyAbn,
-				citySuburb: data.companySuburb,
-				state: data.companyState,
-				postcode: data.companyPostcode,
-				billingACN: data.companyAccount
+			defaultContact: {
+				name: data.contactFirst
 			},
+			city: data.companySuburb,
+			zip: data.companyPostcode,
+			customFields: [
+				{
+					id: 4,
+					value: data.companyABN
+				},
+				{
+					id: 5,
+					value: data.telstraAccountNumber,
+				}
+				],
 		};
+		console.log(company);
 		
-		var contact = {
+		var primary = {
 			firstName: data.contactFirst,
 			lastName: data.contactLast,
 			email: data.contactEmail,
-			phone: data.contactPhone
-		};
-
-		checkExists(companies, company, 'name', 
-			function(item) { // duplicate exits
-				Object.assign(true, item, company);
-				company = item;
+			phone: data.contactPhone,
+			company: {
+				name: data.companyName
 			},
-			function(item) {	// no duplicate
-				
-			});
+		};
+		console.log(primary);
 
-		checkExists(contact, contact, 'email', function(item) {
-			Object.assign(true, item, contact)
-			contact = item;
-			// save modified contact to db
-		});
-	})
+		var technical = {
+			firstName: data.technicalFirst,
+			lastName: data.technicalLast,
+			email: data.technicalEmail,
+			phone: data.technicalPhone,
+			company: {
+				name: data.companyName
+			},
+		};
+		console.log(technical);
 
-	var project = {}
-	project.name = company.name;
-	project.company = company.id;
-	project.board = {
-		name: 'Application'
-	};
-	project.billingMethod = 'FixedFee';
-	project.estimatedStart = '2016-06-01T03:57:39Z';
-	project.estimatedEnd = '2016-06-01T03:57:39Z';
+		var tbc = {
+			firstName: data.tbcFirst,
+			lastName: data.tbcLast,
+			email: data.tbcEmail
+		};
+		console.log(tbc);
 
-	controller.createCompany(company, function(code, body){
-		console.log('createCompany: ' + code);
-		console.log(body);
-		project.company = body;
-		contact.company = body;
-		controller.createContact(contact, function(code, body) {
-			console.log('createContact: ' + code);
-			console.log(body);
-			project.contact = body;
-			controller.createProject(project, function(code, body){
-				console.log('createProject: ' + code);
-				console.log(body);
-				res.send(body)
+		var project = {
+			name: company.name + ' ' + data.solutionsSoftware,
+			company: {},
+			contact: {
+				name: data.technicalFirst
+			},
+			board: {
+				name: 'Application'
+			},
+			type: {
+				name: 'Application Rollout'
+			},
+			billingMethod: 'FixedFee',
+			description: data.solutionsSoftware + " " + data.solutionsLicence + ' ' + data.solutionsQty + "\r\n" + data.supportPackage + "\r\nSales Person" + data.tbcFirst + ' ' + data.tbcLast + "\r\n" + data.tbcEmail + "\r\nVoice Signature ID: " + data.voiceSig,
+			estimatedStart: '2016-06-17T04:21:07Z', 
+			estimatedEnd: '2016-06-17T04:21:07Z',
+		};
+		console.log(project);
+
+		console.log('created objects');
+		company = cache.matchAndMerge(company, companies, ['identifier']) || company; 
+		primary = cache.matchAndMerge(primary, contacts, ['firstName', 'lastName', 'email']) || primary;
+		technical = cache.matchAndMerge(technical, contacts, ['firstName', 'lastName', 'email']) || technical;
+		project = cache.matchAndMerge(project, projects, ['name', 'company']) || project;
+
+		var main = Q.resolve()
+		main.then(function() {
+		var deferred = Q.defer()
+		if(company.id) { //update company
+			controller.asyncRequest({
+				url: controller.url + 'company/companies/' + '{' + company.id + '}',
+				method: 'PUT',
+				json: company
 			})
+				.then(function(res){console.log(res);deferred.resolve(res)})
+		} else { //post company
+			controller.asyncRequest({
+				url: controller.url + 'company/companies',
+				method: 'POST',
+				json: company
+			})
+				.then(function(res){console.log(res);deferred.resolve(res)})
+		}
+		return deferred.promise
 		})
-	})
+
+		.then(function(res) {
+			var deferred = Q.defer()
+			company = res;
+			if(primary.id) { // update contact
+				contactOperation = controller.asyncRequest({
+				method: 'PUT',
+				url: controller.url + 'company/contacts/' + '{' + contact.id + '}',
+				json: primary
+				})
+				.then(function(res){deferred.resolve(res)})
+			} else { // post contact
+				contactOperation = controller.asyncRequest({
+				url: controller.url + 'company/contacts',
+				json: primary,
+				method: 'POST'
+				})
+				.then(function(res){deferred.resolve(res)})
+			}
+			return deferred.promise
+		})
+
+		.then(function(res) {
+			var deferred = Q.defer()
+			primary = res;
+			if(technical.id) { // update contact
+				contactOperation = controller.asyncRequest({
+				method: 'PUT',
+				url: controller.url + 'company/contacts/' + '{' + contact.id + '}',
+				json: technical
+				})
+				.then(function(res){deferred.resolve(res)})
+			} else { // post contact
+				contactOperation = controller.asyncRequest({
+				url: controller.url + 'company/contacts',
+				json: technical,
+				method: 'POST'
+				})
+				.then(function(res){deferred.resolve(res)})
+			}
+			return deferred.promise
+		})			
+
+		.then(function(res) {
+			var deferred = Q.defer()
+			technical = res;
+			if(tbc.id) { // update contact
+				contactOperation = controller.asyncRequest({
+				method: 'PUT',
+				url: controller.url + 'company/contacts/' + '{' + contact.id + '}',
+				json: tbc
+				})
+				.then(function(res){deferred.resolve(res)})
+			} else { // post contact
+				contactOperation = controller.asyncRequest({
+				url: controller.url + 'company/contacts',
+				json: tbc,
+				method: 'POST'
+				})
+				.then(function(res){deferred.resolve(res)})
+			}
+			return deferred.promise
+		})			
+
+		.then(function(res) {
+			var deferred = Q.defer()
+			tbc = res;
+			project.company.id = company.id;
+			if(project.id) { //update project
+				controller.asyncRequest({
+					url: controller.url + 'project/projects/' + '{' + project.id + '}',
+					method: 'PUT',
+					json: project
+				})			
+				.then(function(res){deferred.resolve(res)})
+			} else {//post project
+				projectOperation = controller.asyncRequest({
+					url: controller.url + 'project/projects',
+					method: 'POST',
+					json: project
+				})
+				.then(function(res){deferred.resolve(res)})
+			}
+			return deferred.promise
+		})
+
+		.then(function(result) {
+			console.log('last promise hit');
+			project = result;
+			
+			//Q.all([
+			//	cache.addOrUpdate('companies', company, ['id']),
+			//	cahce.addOrUpdate('contacts', contact, ['id']),
+			//	cahce.addOrUpdate('projects', contact, ['id'])
+			//])
+			//.then(function() {
+				console.log('finish him!');
+				res.send(200);
+			//})
+		})
+})
 })

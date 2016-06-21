@@ -1,0 +1,9 @@
+extend layout
+
+block content
+	include ./admin/usermanagement.jade
+	include ./admin/newuser.jade
+	include ./admin/deleteuser.jade
+	
+block scripts
+	script(type='text/javascript', src='/js/admincontrol.js')
