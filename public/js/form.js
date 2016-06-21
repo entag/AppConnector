@@ -62,6 +62,8 @@ btn.on('click', function(e) {
 	e.preventDefault();
 	var data = {};
 
+	btn.addClass('disabled');
+
 	$('input').each(function() {
 		data[$(this).attr('id')] = $(this).val()
 	})
@@ -75,7 +77,12 @@ btn.on('click', function(e) {
 		data: data,
 		method: 'POST'
 		})
-		.done(function(res) {
-			console.log(res)
+		.done(function(res, statusText, xhr) {
+			console.log(xhr.status);
+			if(xhr.status == 200) {
+				window.location = res;
+			} else {
+				$(btn).removeClass('disabled');
+			}
 		})
 })

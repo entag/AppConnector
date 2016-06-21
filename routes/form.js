@@ -14,6 +14,12 @@ router.get('/', function(req, res) {
 	res.render('form')
 });
 
+router.get('/success', function(req, res) {
+	res.render('form_success', {
+		user: req.user
+	});
+});
+
 router.get('/test', function(req, res) {
 });
 
@@ -230,7 +236,7 @@ router.post('/submit', function(req, res) {
 			//])
 			//.then(function() {
 				console.log('finish him!');
-				res.send(200);
+				res.send(200, '/form/success');
 			//})
 		})
 })
