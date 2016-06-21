@@ -72,7 +72,7 @@ router.post('/submit', function(req, res) {
 		console.log(tbc);
 
 		var project = {
-			name: company.name + ' ' + data.soltuionsSoftware,
+			name: company.name + ' ' + data.solutionsSoftware,
 			company: {},
 			board: {
 				name: 'Application'
