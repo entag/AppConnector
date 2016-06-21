@@ -41,10 +41,21 @@ router.post('/submit', function(req, res) {
 			type: {
 				name: 'Client'
 			},
+			defaultContact: {
+				name: data.contactFirst
+			},
 			city: data.companySuburb,
 			zip: data.companyPostcode,
-			accountNumber: data.companyABN,
-			telstraACN: data.telstraAccountNumber,
+			customFields: [
+				{
+					id: 4,
+					value: data.companyABN
+				},
+				{
+					id: 5,
+					value: data.telstraAccountNumber,
+				}
+				],
 		};
 		console.log(company);
 		
@@ -52,7 +63,10 @@ router.post('/submit', function(req, res) {
 			firstName: data.contactFirst,
 			lastName: data.contactLast,
 			email: data.contactEmail,
-			phone: data.contactPhone
+			phone: data.contactPhone,
+			company: {
+				name: data.companyName
+			},
 		};
 		console.log(primary);
 
@@ -60,7 +74,10 @@ router.post('/submit', function(req, res) {
 			firstName: data.technicalFirst,
 			lastName: data.technicalLast,
 			email: data.technicalEmail,
-			phone: data.technicalPhone
+			phone: data.technicalPhone,
+			company: {
+				name: data.companyName
+			},
 		};
 		console.log(technical);
 
@@ -72,13 +89,19 @@ router.post('/submit', function(req, res) {
 		console.log(tbc);
 
 		var project = {
-			name: company.name + ' ' + data.soltuionsSoftware,
+			name: company.name + ' ' + data.solutionsSoftware,
 			company: {},
+			contact: {
+				name: data.technicalFirst
+			},
 			board: {
 				name: 'Application'
 			},
+			type: {
+				name: 'Application Rollout'
+			},
 			billingMethod: 'FixedFee',
-			description: data.solutionsSoftware + ' ' + data.solutionsLicence + ' ' + data.solutionsQty,
+			description: data.solutionsSoftware + " " + data.solutionsLicence + ' ' + data.solutionsQty + "\r\n" + data.supportPackage + "\r\nSales Person" + data.tbcFirst + ' ' + data.tbcLast + "\r\n" + data.tbcEmail + "\r\nVoice Signature ID: " + data.voiceSig,
 			estimatedStart: '2016-06-17T04:21:07Z', 
 			estimatedEnd: '2016-06-17T04:21:07Z',
 		};
