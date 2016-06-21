@@ -4,8 +4,9 @@
 			span.card-title Company
 			.row
 				.input-field.col.s12
-					input(type='text' class='validate')#companyName
+					input(type='text' class='validate' maxlength='25')#companyName
 					label(for='companyName') Company/Sole Trader Name
+					p Company name is limited to 25 characters
 			.row
 				.input-field.col.s12
 					input(type='number' class='validate' maxlength='11')#companyABN
@@ -35,6 +36,6 @@
 					label(for='companyState') State
 			.row
 				.input-field.col.s12
-					input(type='number' maxlength='13' class='validate')#TelstraAccountNumber
+					input(type='number' maxlength='13' class='validate')#telstraAccountNumber
 					label(for='companyTelstraAcc') Telstra Account Number*
 					blockquote *Telstra account number must be a billing flexcab account number 
