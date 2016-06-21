@@ -78,7 +78,7 @@ router.post('/submit', function(req, res) {
 				name: 'Application'
 			},
 			billingMethod: 'FixedFee',
-			description: data.solutionsSoftware + "\r\n" + data.solutionsLicence + ' ' + data.solutionsQty + "\r\n" + data.supportPackage + "\r\nSales Person" + data.tbcFirst + ' ' + data.tbcLast + "\r\n" + data.tbcEmail + "\r\nVoice Signature ID: " + data.voicesig,
+			description: data.solutionsSoftware + "\r\n" + data.solutionsLicence + ' ' + data.solutionsQty + "\r\n" + data.supportPackage + "\r\nSales Person" + data.tbcFirst + ' ' + data.tbcLast + "\r\n" + data.tbcEmail + "\r\nVoice Signature ID: " + data.voiceSig,
 			estimatedStart: '2016-06-17T04:21:07Z', 
 			estimatedEnd: '2016-06-17T04:21:07Z',
 		};
