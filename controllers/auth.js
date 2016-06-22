@@ -53,9 +53,12 @@ module.exports = {
         var self = this;
 
         docDB.getItem('select * from root r where r.userId = "' + id + '"', function(e, user) {
-            if(user && user.admin === true) {
+		console.log(user.admin);
+            if(user.admin === 'true') {
+		console.log('admin check passed');
                 return callback(true);
             }
+		console.log('admin check failed');
             return callback(false);
         });
     },
