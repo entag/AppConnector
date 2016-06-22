@@ -20,7 +20,7 @@ module.exports = {
     getAccount: function (userId, callback) {
         var self = this;
 
-        docDB.getItem('select * from root r where r.userId = "' + userId + '"', function(e, user) {
+        docDB.getItem('select * from root r where r.userId = "' + userId.toLowerCase() + '"', function(e, user) {
             if(!user) {
                 return callback(e);
             }
@@ -32,7 +32,7 @@ module.exports = {
     authenticate: function(userId, password, callback) {
         var self = this;
 
-        docDB.getItem('select * from root r where r.userId = "' + userId + '"', function(e, user) {         
+        docDB.getItem('select * from root r where r.userId = "' + userId.toLowerCase() + '"', function(e, user) {         
             if (e || !user) {
                 if(!user) {
                     return callback('Invalid User');
