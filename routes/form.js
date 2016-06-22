@@ -164,6 +164,7 @@ router.post('/submit', function(req, res) {
 		.then(function(res) {
 			var deferred = Q.defer()
 			primary = res;
+			project.contact = primary;
 			if(technical.id) { // update contact
 				contactOperation = controller.asyncRequest({
 				method: 'PUT',
@@ -228,16 +229,7 @@ router.post('/submit', function(req, res) {
 		.then(function(result) {
 			console.log('last promise hit');
 			project = result;
-			
-			//Q.all([
-			//	cache.addOrUpdate('companies', company, ['id']),
-			//	cahce.addOrUpdate('contacts', contact, ['id']),
-			//	cahce.addOrUpdate('projects', contact, ['id'])
-			//])
-			//.then(function() {
-				console.log('finish him!');
-				res.send(200, '/form/success');
-			//})
+			res.send(200, '/form/success');
 		})
 })
 })
