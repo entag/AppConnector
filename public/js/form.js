@@ -24,6 +24,10 @@ techConSame.on('change', function(e) {
 		technical.last.val(primary.last.val())
 		technical.email.val(primary.email.val())
 		technical.phone.val(primary.phone.val())
+		technical.first.next().addClass('active');
+		technical.last.next().addClass('active');
+		technical.email.next().addClass('active');
+		technical.phone.next().addClass('active');
 		technical.first.prop('disabled', true);
 		technical.last.prop('disabled', true);
 		technical.email.prop('disabled', true);
@@ -33,10 +37,15 @@ techConSame.on('change', function(e) {
 		technical.last.prop('disabled', false);
 		technical.email.prop('disabled', false);
 		technical.phone.prop('disabled', false);
+		technical.first.next().removeClass('active');
+		technical.last.next().removeClass('active');
+		technical.email.next().removeClass('active');
+		technical.phone.next().removeClass('active');
 		technical.first.val("");
 		technical.last.val("");
 		technical.email.val("");
 		technical.phone.val("");
+		
 	}	
 });
 
