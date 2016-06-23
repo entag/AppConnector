@@ -81,6 +81,7 @@ module.exports = {
 
     register: function (data, callback) {
         var self = this;
+	console.log(data);
 
         self.getAccount(data.email, function (e, user) {
             if (user) {
@@ -155,7 +156,7 @@ module.exports = {
             callback('Error: You cannot delete the admin account');
         }
 
-        docDB.getItem('select * from root r where r.userId = "' + userId + '"', function (e, user) {
+        docDB.getItem('select * from root r where r.userId = "' + userId.toLowerCase() + '"', function (e, user) {
             if(e || !user) {
                 return callback(e);
             }

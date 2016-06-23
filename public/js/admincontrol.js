@@ -1,52 +1,81 @@
-var username = $('#delusername');
-var confirmuser = $('#delconfirmuser');
-var adduser = $('#adduser');
-var addpassword = $('#addpassword');
+var deleteUsername = $('#deleteUsername');
+var deleteConfirmUsername = $('#deleteConfirmUsername');
+var registerUsername = $('#registerUser');
+var registerPassword = $('#registerPassword');
 
 var btnadd = $('#form-button-add');
 var btndelete = $('#form-button-delete');
 
 btnadd.on('click', function(e) {
 	e.preventDefault();
-	var data = {};
+	var data = {
+		email: registerUsername.val(),
+		password: registerPassword.val()
+	}
 
-	$('input').each(function() {
-		data[$(this).attr('id')] = $(this).val()
-	})
-
-	$('select').each(function() {
-		data[$(this).attr('id')] = $(this).val()
-	})
+	btnadd.addClass('disabled');
 
 	$.ajax({
 		url: '/admin/register',
 		data: data,
 		method: 'POST'
 		})
-		.done(function(res) {
-			console.log(res)
+		.done(function(res, statusText, xhr) {
+			console.log(xhr);
+			btnadd.removeClass('disabled');
+			registerUsername.val('')
+			.next().removeClass('active');
+			registerPassword.val('')
+			.next().removeClass('active');
+		})
+		.error(function(res, statusText, xhr) {
+			console.log(xhr);
+			btnadd.removeClass('disabled');
+			registerUsername.val('')
+			.next().removeClass('active');
+			registerPassword.val('')
+			.next().removeClass('active');
 		})
 })
 
 btndelete.on('click', function(e) {
 	e.preventDefault();
-	var data = {};
+	var data = deleteUsername.val()
+	
+	if(deleteUsername.val() == '' ^ deleteConfirmUsername.val() == '') {
+		return
+	}
 
-	$('input').each(function() {
-		data[$(this).attr('id')] = $(this).val()
-	})
+	if(deleteUsername.val() != deleteConfirmUsername.val()) {
+		console.log("delete fields don't match");
+		return
+	}
 
-	$('select').each(function() {
-		data[$(this).attr('id')] = $(this).val()
-	})
+	btndelete.addClass('disabled');
+
 
 	$.ajax({
-		url: '/admin/register',
-		data: data,
+		url: '/admin/delete',
+		data: {
+			user: data
+		},
 		method: 'POST'
 		})
-		.done(function(res) {
-			console.log(res)
+		.done(function(res, statusText, xhr) {
+			console.log(xhr);
+			btndelete.removeClass('disabled');
+			deleteUsername.val('')
+			.next().removeClass('active');
+			deleteConfirmUsername.val('')
+			.next().removeClass('active');
+		})
+		.error(function(res, statusText, xhr) {
+			console.log(xhr);
+			btndelete.removeClass('disabled');
+			deleteUsername.val('')
+			.next().removeClass('active');
+			deleteConfirmUsername.val('')
+			.next().removeClass('active');
 		})
 })
 
