@@ -29,6 +29,19 @@ module.exports = {
         });
     },
 
+    getFullAccount: function (userId, callback) {
+        var self = this;
+
+        docDB.getItem('select * from root r where r.userId = "' + userId.toLowerCase() + '"', function(e, user) {
+            if(!user) {
+                return callback(e);
+            }
+
+            return callback(e, user);
+        });
+    },
+
+
     authenticate: function(userId, password, callback) {
         var self = this;
 
@@ -148,6 +161,27 @@ module.exports = {
             });
         });
     },
+
+	resetPassword: function(data, callback) {
+		var self = this;
+		
+		self.getFullAccount(data.userId, function (e, user) {
+		    if (e || !user) {
+			return callback('error updating user');
+		    }
+
+		    //check for changed password
+			console.log(user);
+			user.salt = self.makeSalt();  
+			user.password = self.encryptPassword(data.newPassword, user.salt);
+
+
+		    //update a new user                
+		    docDB.updateItem(user, function(e) {
+			callback(e,user);
+		    });
+		});
+	}, 
 
     removeAccount: function(userId, callback) {
         var self = this;

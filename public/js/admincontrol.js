@@ -82,6 +82,42 @@ btndelete.on('click', function(e) {
 		})
 })
 
+btnchange.on('click', function() {
+	if(!resetuser.val() ^ !resetpw.val()) {
+		return
+	}
+
+	btnchange.addClass('disabled', true);
+
+	var data = {
+		userId: resetuser.val(),
+		newPassword: resetpw.val()
+	}
+
+	$.ajax({
+		url: '/admin/reset',
+		data: data,
+		method: 'POST'
+		})
+		.done(function(res, statusText, xhr) {
+			console.log(xhr);
+			btnchange.removeClass('disabled');
+			resetuser.val('')
+			.next().removeClass('active');
+			resetpw.val('')
+			.next().removeClass('active');
+		})
+		.error(function(res, statusText, xhr) {
+			console.log(xhr);
+			btnchange.removeClass('disabled');
+			resetuser.val('')
+			.next().removeClass('active');
+			resetpw.val('')
+			.next().removeClass('active');
+		})
+	})
+
+
 //role=form(role='form', action='/auth/register', method='POST') 
 // 	.form-group 
 //		label email 

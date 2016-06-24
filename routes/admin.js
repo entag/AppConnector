@@ -30,5 +30,12 @@ router.post('/delete', routeAuth.forceAdmin, function(req, res) {
 	})
 })
 
+router.post('/reset', routeAuth.forceAdmin, function(req, res) {
+	var user = req.body;
+	auth.resetPassword(user, function(e, user) {
+		if(e) {console.log(e); return res.send(400)}
+		return res.send(200);
+	})
+})
 
 module.exports = router;
