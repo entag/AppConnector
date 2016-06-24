@@ -37,6 +37,9 @@ router.post('/submit', function(req, res) {
 		contacts = allData[1],
 		projects = allData[2];
 
+		data.companyName = data.companyName.replace(/[^a-zA-Z0-9]/gi, '');
+		console.log(data.companyName);
+
 		var company = {			//create company
 			name: data.companyName,
 			identifier: data.companyName,
