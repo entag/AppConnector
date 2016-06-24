@@ -2,9 +2,12 @@ var deleteUsername = $('#deleteUsername');
 var deleteConfirmUsername = $('#deleteConfirmUsername');
 var registerUsername = $('#registerUser');
 var registerPassword = $('#registerPassword');
+var resetuser = $('#resetUser');
+var resetpw = $('#resetPassword')
 
 var btnadd = $('#form-button-add');
 var btndelete = $('#form-button-delete');
+var btnchange = $('#form-button-resetpw');
 
 btnadd.on('click', function(e) {
 	e.preventDefault();
