@@ -2,9 +2,20 @@ var software = $('#solutionsSoftware');
 var licence = $('#solutionsLicence');
 var qty = $('#solutionsQty');
 
+var agree = $('#cbAgree');
+
 var techConSame = $('#technicalCopy');
 
 var btn = $('#form-button');
+
+agree.on('change', function(e){
+	if(agree.is(':checked')){
+		btn.prop('disabled', false);
+	}
+		else {
+		btn.prop('disabled', true);				
+		}
+});
 
 techConSame.on('change', function(e) {
 	var technical = {};
