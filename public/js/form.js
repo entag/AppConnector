@@ -10,10 +10,10 @@ var btn = $('#form-button');
 
 agree.on('change', function(e){
 	if(agree.is(':checked')){
-		btn.prop('disabled', false);
+		btn.addClass('disabled', false);
 	}
 		else {
-		btn.prop('disabled', true);				
+		btn.addClass('disabled', true);				
 		}
 });
 
