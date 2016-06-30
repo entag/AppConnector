@@ -26,7 +26,7 @@ $(function() {
 		})
 		.error(function(){
 			// flash error message
-			$.notify('Invalid login credentials', 'error');
+			$.notify('Invalid Login Credentials', 'error');
 			$('#btn_login').removeClass('disabled');
 		})
 	})
