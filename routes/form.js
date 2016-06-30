@@ -1,10 +1,9 @@
 var router = require('express').Router();
 var controller = require('../controllers/connectwise');
-var Cache = require('../controllers/Cache');
+var cache = require('../controllers/Cache');
 var Q = require('q');
 module.exports = router;
 
-var cache = new Cache();
 
 router.get('/', function(req, res) {
 	if(!req.isAuthenticated()) {
@@ -117,10 +116,6 @@ router.post('/submit', function(req, res) {
 		console.log(project);
 
 		console.log('created objects');
-		company = cache.matchAndMerge(company, companies, ['identifier']) || company; 
-		primary = cache.matchAndMerge(primary, contacts, ['firstName', 'lastName', 'email']) || primary;
-		technical = cache.matchAndMerge(technical, contacts, ['firstName', 'lastName', 'email']) || technical;
-		project = cache.matchAndMerge(project, projects, ['name', 'company']) || project;
 
 		var main = Q.resolve()
 		main.then(function() {
@@ -230,9 +225,27 @@ router.post('/submit', function(req, res) {
 		})
 
 		.then(function(result) {
+			var logItem = {
+				tbcRep: tbc.firstName + ' ' + tbc.lastName,
+				account: req.user.userId,
+				company: company.identifier,
+				time: new Date(),
+				projectId: project.id
+			}
+			var logAction = cache.add({
+				item: logItem,
+				databaseId: 'cache',
+				collectionId: 'log'
+			})			
+			logAction.then(function() {
 			console.log('last promise hit');
 			project = result;
 			res.send(200, '/form/success');
+			})
+		})
+
+		.then(NULL, function(err) {
+			res.send(500, err);
 		})
 })
 })

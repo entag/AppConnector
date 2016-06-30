@@ -44,7 +44,7 @@ connectwise.asyncRequest = function(options) {
 	request(options, function(error, response, body) {
 		if(error) {console.log(error);deferred.reject(error)}
 		else {
-			console.log(body);deferred.resolve(body)
+			deferred.resolve(body)
 		}
 	})
 	return deferred.promise;
