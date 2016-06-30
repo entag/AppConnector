@@ -51,7 +51,7 @@ router.post('/submit', function(req, res) {
 				name: 'Client'
 			},
 			defaultContact: {
-				name: data.contactFirst
+				name: data.contactFirst + " " + data.contactLast
 			},
 			city: data.companySuburb,
 			zip: data.companyPostcode,
