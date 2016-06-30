@@ -1,0 +1,15 @@
+.row
+	.col.s12.form.card
+		.card-content
+			span.card-title Delete User
+			.row
+				.input-field.col.s12
+					input(type='email', name='email')#deleteUsername
+					label(for='deleteUsername') Username
+			.row
+				.input-field.col.s12
+					input(type='email', name='confirmemail')#deleteConfirmUsername
+					label(for='deleteConfirmUsername') Confirm Username
+			.row
+				.input-field.col.s12
+					button(class='btn' type='submit')#form-button-delete Delete User

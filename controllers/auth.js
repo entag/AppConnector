@@ -20,7 +20,7 @@ module.exports = {
     getAccount: function (userId, callback) {
         var self = this;
 
-        docDB.getItem('select * from root r where r.userId = "' + userId + '"', function(e, user) {
+        docDB.getItem('select * from root r where r.userId = "' + userId.toLowerCase() + '"', function(e, user) {
             if(!user) {
                 return callback(e);
             }
@@ -29,10 +29,23 @@ module.exports = {
         });
     },
 
+    getFullAccount: function (userId, callback) {
+        var self = this;
+
+        docDB.getItem('select * from root r where r.userId = "' + userId.toLowerCase() + '"', function(e, user) {
+            if(!user) {
+                return callback(e);
+            }
+
+            return callback(e, user);
+        });
+    },
+
+
     authenticate: function(userId, password, callback) {
         var self = this;
 
-        docDB.getItem('select * from root r where r.userId = "' + userId + '"', function(e, user) {         
+        docDB.getItem('select * from root r where r.userId = "' + userId.toLowerCase() + '"', function(e, user) {         
             if (e || !user) {
                 if(!user) {
                     return callback('Invalid User');
@@ -53,9 +66,12 @@ module.exports = {
         var self = this;
 
         docDB.getItem('select * from root r where r.userId = "' + id + '"', function(e, user) {
-            if(user && user.admin === true) {
+		console.log(user.admin);
+            if(user.admin === 'true') {
+		console.log('admin check passed');
                 return callback(true);
             }
+		console.log('admin check failed');
             return callback(false);
         });
     },
@@ -78,6 +94,7 @@ module.exports = {
 
     register: function (data, callback) {
         var self = this;
+	console.log(data);
 
         self.getAccount(data.email, function (e, user) {
             if (user) {
@@ -145,6 +162,27 @@ module.exports = {
         });
     },
 
+	resetPassword: function(data, callback) {
+		var self = this;
+		
+		self.getFullAccount(data.userId, function (e, user) {
+		    if (e || !user) {
+			return callback('error updating user');
+		    }
+
+		    //check for changed password
+			console.log(user);
+			user.salt = self.makeSalt();  
+			user.password = self.encryptPassword(data.newPassword, user.salt);
+
+
+		    //update a new user                
+		    docDB.updateItem(user, function(e) {
+			callback(e,user);
+		    });
+		});
+	}, 
+
     removeAccount: function(userId, callback) {
         var self = this;
 
@@ -152,7 +190,7 @@ module.exports = {
             callback('Error: You cannot delete the admin account');
         }
 
-        docDB.getItem('select * from root r where r.userId = "' + userId + '"', function (e, user) {
+        docDB.getItem('select * from root r where r.userId = "' + userId.toLowerCase() + '"', function (e, user) {
             if(e || !user) {
                 return callback(e);
             }

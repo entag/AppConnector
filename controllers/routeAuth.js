@@ -10,19 +10,10 @@ module.exports = {
 	},
 
 	forceAdmin: function(req, res, next) {
-		if (req.isAuthenticated()) {
-			auth.isAdmin(req.user.userId,
-			function(response) {
-				if(response) {
-					return next()
-				} else {
-					return res.redirect('/')
-				}
-			})
-		} else {
-			var url = (req.socket.encrypted ? 'https://' : 'http://') + req.headers.host + '/';
-			console.log(url);
-			res.redirect('/');
+		console.log(req.user);
+		auth.isAdmin(req.user.userId, function(response){
+			if(response) {next()
+			} else {return res.redirect('/')}
+		})
 		}
 	}
-}

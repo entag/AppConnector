@@ -1,10 +1,9 @@
 var router = require('express').Router();
 var controller = require('../controllers/connectwise');
-var Cache = require('../controllers/Cache');
+var cache = require('../controllers/Cache');
 var Q = require('q');
 module.exports = router;
 
-var cache = new Cache();
 
 router.get('/', function(req, res) {
 	if(!req.isAuthenticated()) {
@@ -14,24 +13,31 @@ router.get('/', function(req, res) {
 	res.render('form')
 });
 
+router.get('/success', function(req, res) {
+	res.render('form_success', {
+		user: req.user
+	});
+});
+
 router.get('/test', function(req, res) {
 });
 
 router.post('/submit', function(req, res) {
 	var data = req.body;
-	console.log(data);
 	Q.all([
-		cache.query('companies', 'select * from root r'),
-		cache.query('contacts', 'select * from root r'),
-		cache.query('projects', 'select * from root r')	
+		controller.asyncRequest({
+			url: controller.url + 'company/companies',
+			method: 'GET'
+		})
 	])
 	.then(function(allData) {
-		console.log('alldata loaded');
-		var companies = allData[0],
-		contacts = allData[1],
-		projects = allData[2];
+		var companies = allData[0];
 
-		var company = {			//create company
+		// remove illegal symbols
+		data.companyName = data.companyName.replace(/[^a-zA-Z0-9]/gi, '');
+
+		// create company
+		var company = {
 			name: data.companyName,
 			identifier: data.companyName,
 			addressLine1: data.companyAddress,
@@ -46,34 +52,52 @@ router.post('/submit', function(req, res) {
 			},
 			city: data.companySuburb,
 			zip: data.companyPostcode,
-			accountNumber: data.companyABN,
-			telstraACN: data.telstraAccountNumber,
+			customFields: [
+				{
+					id: 4,
+					value: data.companyABN
+				},
+				{
+					id: 5,
+					value: data.telstraAccountNumber,
+				}
+				],
 		};
-		console.log(company);
+
+		//check for existing company
+		for(var i=0; i<companies.length; i++) {
+			if(companies[i].identifier == company.identifier) {
+				company = companies[i];
+				console.log('company already exists');
+				break;
+			}
+		}
 		
 		var primary = {
 			firstName: data.contactFirst,
 			lastName: data.contactLast,
 			email: data.contactEmail,
 			phone: data.contactPhone,
-			company: data.companyName
+			company: {
+				name: data.companyName
+			},
 		};
-		console.log(primary);
 
 		var technical = {
 			firstName: data.technicalFirst,
 			lastName: data.technicalLast,
 			email: data.technicalEmail,
-			phone: data.technicalPhone
+			phone: data.technicalPhone,
+			company: {
+				name: data.companyName
+			},
 		};
-		console.log(technical);
 
 		var tbc = {
 			firstName: data.tbcFirst,
 			lastName: data.tbcLast,
 			email: data.tbcEmail
 		};
-		console.log(tbc);
 
 		var project = {
 			name: company.name + ' ' + data.solutionsSoftware,
@@ -84,29 +108,21 @@ router.post('/submit', function(req, res) {
 			board: {
 				name: 'Application'
 			},
+			type: {
+				name: 'Application Rollout'
+			},
 			billingMethod: 'FixedFee',
-			description: data.solutionsSoftware + " " + data.solutionsLicence + ' ' + data.solutionsQty + "\r\n" + data.supportPackage + "\r\nSales Person" + data.tbcFirst + ' ' + data.tbcLast + "\r\n" + data.tbcEmail + "\r\nVoice Signature ID: " + data.voiceSig,
+			description: data.solutionsSoftware + ' ' + data.solutionsQty + "\r\n" + data.solutionsLicence + "\r\n"  + data.supportPackage + "\r\nSales Person: " + data.tbcFirst + ' ' + data.tbcLast + "\r\n" + data.tbcEmail + "\r\nVoice Signature ID: " + data.voiceSig + "\r\n" + data.ctechnicalFirst + " " + data.technicalLast,
 			estimatedStart: '2016-06-17T04:21:07Z', 
 			estimatedEnd: '2016-06-17T04:21:07Z',
 		};
-		console.log(project);
-
-		console.log('created objects');
-		company = cache.matchAndMerge(company, companies, ['identifier']) || company; 
-		primary = cache.matchAndMerge(primary, contacts, ['firstName', 'lastName', 'email']) || primary;
-		technical = cache.matchAndMerge(technical, contacts, ['firstName', 'lastName', 'email']) || technical;
-		project = cache.matchAndMerge(project, projects, ['name', 'company']) || project;
 
 		var main = Q.resolve()
 		main.then(function() {
 		var deferred = Q.defer()
-		if(company.id) { //update company
-			controller.asyncRequest({
-				url: controller.url + 'company/companies/' + '{' + company.id + '}',
-				method: 'PUT',
-				json: company
-			})
-				.then(function(res){console.log(res);deferred.resolve(res)})
+		if(company.id) { //company exists
+			console.log('did not post company');
+			deferred.resolve(company)
 		} else { //post company
 			controller.asyncRequest({
 				url: controller.url + 'company/companies',
@@ -142,6 +158,7 @@ router.post('/submit', function(req, res) {
 		.then(function(res) {
 			var deferred = Q.defer()
 			primary = res;
+			project.contact = primary;
 			if(technical.id) { // update contact
 				contactOperation = controller.asyncRequest({
 				method: 'PUT',
@@ -204,18 +221,27 @@ router.post('/submit', function(req, res) {
 		})
 
 		.then(function(result) {
+			var logItem = {
+				tbcRep: tbc.firstName + ' ' + tbc.lastName,
+				account: req.user.userId,
+				company: company.identifier,
+				time: new Date(),
+				projectId: project.id
+			}
+			var logAction = cache.add({
+				item: logItem,
+				databaseId: 'cache',
+				collectionId: 'log'
+			})			
+			logAction.then(function() {
 			console.log('last promise hit');
 			project = result;
-			
-			//Q.all([
-			//	cache.addOrUpdate('companies', company, ['id']),
-			//	cahce.addOrUpdate('contacts', contact, ['id']),
-			//	cahce.addOrUpdate('projects', contact, ['id'])
-			//])
-			//.then(function() {
-				console.log('finish him!');
-				res.send(200);
-			//})
+			res.send(200, '/form/success');
+			})
+		})
+
+		.then(NULL, function(err) {
+			res.send(500, err);
 		})
 })
 })
