@@ -222,11 +222,14 @@ router.post('/submit', function(req, res) {
 
 		.then(function(result) {
 			var logItem = {
+				company: company.identifier,
+				app: data.solutionsSoftware,
+				qty: data.soltutionsQty,
+				integation: data.solutionsLicence,
+				support: data.supportPackage,
 				tbcRep: tbc.firstName + ' ' + tbc.lastName,
 				account: req.user.userId,
-				company: company.identifier,
 				time: new Date(),
-				projectId: project.id
 			}
 			var logAction = cache.add({
 				item: logItem,
