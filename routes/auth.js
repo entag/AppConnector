@@ -17,11 +17,10 @@ module.exports = function(passport) {
     var signin = function(req, res, next) {
 	passport.authenticate('local', function(err, user, info){
 		req.login(user, function(err) {
-			if(err){return next(err)}
-			res.writeHeader(301, {
-				Location: (req.socket.encrypted ? 'https://' : 'http://') + req.headers.host
-			})
-			res.end()
+			if(err){
+				return res.send(401);
+			}
+			return res.send(200);
 		})
 	})(req, res, next)
     };
@@ -67,7 +66,7 @@ module.exports = function(passport) {
 	res.redirect('/');
     });
 
-    router.post('/signin',signin )
+    router.post('/signin',signin);
 
     return router;
 }

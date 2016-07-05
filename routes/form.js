@@ -1,10 +1,9 @@
 var router = require('express').Router();
 var controller = require('../controllers/connectwise');
-var Cache = require('../controllers/Cache');
+var cache = require('../controllers/Cache');
 var Q = require('q');
 module.exports = router;
 
-var cache = new Cache();
 
 router.get('/', function(req, res) {
 	if(!req.isAuthenticated()) {
@@ -25,22 +24,20 @@ router.get('/test', function(req, res) {
 
 router.post('/submit', function(req, res) {
 	var data = req.body;
-	console.log(data);
 	Q.all([
-		cache.query('companies', 'select * from root r'),
-		cache.query('contacts', 'select * from root r'),
-		cache.query('projects', 'select * from root r')	
+		controller.asyncRequest({
+			url: controller.url + 'company/companies',
+			method: 'GET'
+		})
 	])
 	.then(function(allData) {
-		console.log('alldata loaded');
-		var companies = allData[0],
-		contacts = allData[1],
-		projects = allData[2];
+		var companies = allData[0];
 
+		// remove illegal symbols
 		data.companyName = data.companyName.replace(/[^a-zA-Z0-9]/gi, '');
-		console.log(data.companyName);
 
-		var company = {			//create company
+		// create company
+		var company = {
 			name: data.companyName,
 			identifier: data.companyName,
 			addressLine1: data.companyAddress,
@@ -66,7 +63,15 @@ router.post('/submit', function(req, res) {
 				}
 				],
 		};
-		console.log(company);
+
+		//check for existing company
+		for(var i=0; i<companies.length; i++) {
+			if(companies[i].identifier == company.identifier) {
+				company = companies[i];
+				console.log('company already exists');
+				break;
+			}
+		}
 		
 		var primary = {
 			firstName: data.contactFirst,
@@ -77,7 +82,6 @@ router.post('/submit', function(req, res) {
 				name: data.companyName
 			},
 		};
-		console.log(primary);
 
 		var technical = {
 			firstName: data.technicalFirst,
@@ -88,14 +92,12 @@ router.post('/submit', function(req, res) {
 				name: data.companyName
 			},
 		};
-		console.log(technical);
 
 		var tbc = {
 			firstName: data.tbcFirst,
 			lastName: data.tbcLast,
 			email: data.tbcEmail
 		};
-		console.log(tbc);
 
 		var project = {
 			name: company.name + ' ' + data.solutionsSoftware,
@@ -110,28 +112,17 @@ router.post('/submit', function(req, res) {
 				name: 'Application Rollout'
 			},
 			billingMethod: 'FixedFee',
-			description: data.solutionsSoftware + " " + data.solutionsLicence + ' ' + data.solutionsQty + "\r\n" + data.supportPackage + "\r\nSales Person" + data.tbcFirst + ' ' + data.tbcLast + "\r\n" + data.tbcEmail + "\r\nVoice Signature ID: " + data.voiceSig,
+			description: data.solutionsSoftware + ' ' + data.solutionsQty + "\r\n" + data.solutionsLicence + "\r\n"  + data.supportPackage + "\r\nSales Person: " + data.tbcFirst + ' ' + data.tbcLast + "\r\n" + data.tbcEmail + "\r\nVoice Signature ID: " + data.voiceSig + "\r\n" + data.ctechnicalFirst + " " + data.technicalLast,
 			estimatedStart: '2016-06-17T04:21:07Z', 
 			estimatedEnd: '2016-06-17T04:21:07Z',
 		};
-		console.log(project);
-
-		console.log('created objects');
-		company = cache.matchAndMerge(company, companies, ['identifier']) || company; 
-		primary = cache.matchAndMerge(primary, contacts, ['firstName', 'lastName', 'email']) || primary;
-		technical = cache.matchAndMerge(technical, contacts, ['firstName', 'lastName', 'email']) || technical;
-		project = cache.matchAndMerge(project, projects, ['name', 'company']) || project;
 
 		var main = Q.resolve()
 		main.then(function() {
 		var deferred = Q.defer()
-		if(company.id) { //update company
-			controller.asyncRequest({
-				url: controller.url + 'company/companies/' + '{' + company.id + '}',
-				method: 'PUT',
-				json: company
-			})
-				.then(function(res){console.log(res);deferred.resolve(res)})
+		if(company.id) { //company exists
+			console.log('did not post company');
+			deferred.resolve(company)
 		} else { //post company
 			controller.asyncRequest({
 				url: controller.url + 'company/companies',
@@ -230,9 +221,27 @@ router.post('/submit', function(req, res) {
 		})
 
 		.then(function(result) {
+			var logItem = {
+				tbcRep: tbc.firstName + ' ' + tbc.lastName,
+				account: req.user.userId,
+				company: company.identifier,
+				time: new Date(),
+				projectId: project.id
+			}
+			var logAction = cache.add({
+				item: logItem,
+				databaseId: 'cache',
+				collectionId: 'log'
+			})			
+			logAction.then(function() {
 			console.log('last promise hit');
 			project = result;
 			res.send(200, '/form/success');
+			})
+		})
+
+		.then(NULL, function(err) {
+			res.send(500, err);
 		})
 })
 })

@@ -3,18 +3,12 @@
 		.card-content
 			span.card-title Solutions
 			.row
-				.input-field.col.s12
+				.input-field.col.s8
 					select#solutionsSoftware
 						option(value='Box') Box
 						option(value='DocuSign') DocuSign
-						option(value='Shoeboxed') Shoeboxed
-					label(for='solutionsSoftware') Sofware
-			.row
-				.input-field.col.s8
-					select#solutionsLicence
-						option(value='Sole Trader') Sole Trader
-						option(value='small business') Small business
-					label(for='solutionsLicence') Licence
+						option(value='Box/DocuSign') Box and DocuSign
+					label(for='solutionsSoftware') Application
 				.input-field.col.s4
 					select#solutionsQty
 						option(value='1') 1
@@ -28,10 +22,17 @@
 						option(value='9') 9
 						option(value='10') 10
 					label(for='solutionsQty') Qty
+			.row  
+				.input-field.col.s12
+						select#solutionsLicence  
+							option(value='Kit A') Kit A 
+							option(value='Kit B') Kit B
+							option(value='Kit Box and Docusign') Kit Box and Docusign
+						label(for='solutionsLicence') Integration Kit
 			.row
 				.input-field.col.s12
-					select#supportpackage
+					select#supportPackage
 						option(value='None') None
-						option(value='Support 5 hours') Support 5 Hours
-						option(value='Support 10 hours') Support 10 Hours
-					label(for='supportpackage') Support Package
+						option(value='Support 5 hours') 5 Hours
+						option(value='Support 10 hours') 11 Hours
+					label(for='supportPackage') Support Kit

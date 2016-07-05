@@ -73,11 +73,10 @@ httpServer.listen(port, function() {
 	console.log('server listening: ' + port);
 })
 //var server = https.createServer({
-//	key: fs.readFileSync('./ssl/server.key'),
-//	cert: fs.readFileSync('./ssl/server.crt'),
-//	ca: fs.readFileSync('./ssl/ca.crt'),
+//	pfx: fs.readFileSync('./ssl/appConnecter.pfx'),
+//	passphrase: 'Google009!',
 //	requestCert: true,
-//	rejectUnauthorized: false,
+//	rejectUnauthorized: false
 //}, app).listen(port, function() {
-//	console.log('server listening on: ' + port)
+//	console.log('https server listening on: ' + port)
 //});
