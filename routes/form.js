@@ -76,26 +76,51 @@ router.post('/submit', function(req, res) {
 		var primary = {
 			firstName: data.contactFirst,
 			lastName: data.contactLast,
-			email: data.contactEmail,
-			phone: data.contactPhone,
-			company: {
-				name: data.companyName
-			},
+			communicationItems: [{
+				type: {
+					name: 'email'
+				},
+				value: data.contactEmail,
+				communicationType: 'email'
+			}, {
+				type: {
+					name: 'phone'
+				},
+				value : data.contactPhone,
+				communicationType: 'phone'
+			}],
+			company: company
 		};
 
 		var technical = {
 			firstName: data.technicalFirst,
 			lastName: data.technicalLast,
-			email: data.technicalEmail,
-			phone: data.technicalPhone,
-			company: {
-				name: data.companyName
-			},
+			communicationItems: [{
+				type: {
+					name: 'email'
+				},
+				value: data.technicalEmail,
+				communicationType: 'email'
+			}, {
+				type: {
+					name: 'phone'
+				},
+				value : data.technicalPhone,
+				communicationType: 'phone'
+			}],
+			company: company
 		};
 
 		var tbc = {
 			firstName: data.tbcFirst,
 			lastName: data.tbcLast,
+			communicationItems: [{
+				type: {
+					name: 'email'
+				},
+				value: data.tbcEmail,
+				communicationType: 'email'
+			}],
 			email: data.tbcEmail
 		};
 
@@ -116,6 +141,8 @@ router.post('/submit', function(req, res) {
 			estimatedStart: '2016-06-17T04:21:07Z', 
 			estimatedEnd: '2016-06-17T04:21:07Z',
 		};
+
+		console.log(primary);
 
 		var main = Q.resolve()
 		main.then(function() {
@@ -221,12 +248,13 @@ router.post('/submit', function(req, res) {
 		})
 
 		.then(function(result) {
+			project = result;
 			var logItem = {
-				tbcRep: tbc.firstName + ' ' + tbc.lastName,
+				tbcRep: tbc,
 				account: req.user.userId,
-				company: company.identifier,
+				company: company,
 				time: new Date(),
-				projectId: project.id
+				project: project
 			}
 			var logAction = cache.add({
 				item: logItem,
@@ -234,14 +262,11 @@ router.post('/submit', function(req, res) {
 				collectionId: 'log'
 			})			
 			logAction.then(function() {
-			console.log('last promise hit');
-			project = result;
 			res.send(200, '/form/success');
 			})
 		})
-
 		.then(NULL, function(err) {
 			res.send(500, err);
 		})
-})
+	})
 })
