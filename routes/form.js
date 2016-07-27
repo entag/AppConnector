@@ -86,7 +86,7 @@ router.post('/submit', function(req, res) {
 				type: {
 					name: 'phone'
 				},
-				value : data.contactPhone,
+				value: data.contactPhone,
 				communicationType: 'phone'
 			}],
 			company: company
@@ -105,7 +105,7 @@ router.post('/submit', function(req, res) {
 				type: {
 					name: 'phone'
 				},
-				value : data.technicalPhone,
+				value: data.technicalPhone,
 				communicationType: 'phone'
 			}],
 			company: company
@@ -164,6 +164,8 @@ router.post('/submit', function(req, res) {
 		.then(function(res) {
 			var deferred = Q.defer()
 			company = res;
+			primary.company = company;
+			technical.company = company;
 			if(primary.id) { // update contact
 				contactOperation = controller.asyncRequest({
 				method: 'PUT',
