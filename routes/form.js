@@ -137,7 +137,7 @@ router.post('/submit', function(req, res) {
 				name: 'Application Rollout'
 			},
 			billingMethod: 'FixedFee',
-			description: data.solutionsSoftware + ' ' + data.solutionsQty + "\r\n" + data.solutionsLicence + "\r\n"  + data.supportPackage + "\r\nSales Person: " + data.tbcFirst + ' ' + data.tbcLast + "\r\n" + data.tbcEmail + "\r\nVoice Signature ID: " + data.voiceSig + "\r\n" + data.ctechnicalFirst + " " + data.technicalLast,
+			description: description: data.solutionsSoftware + ' ' + data.solutionsQty + "\r\n" + data.solutionsLicence + "\r\n"  + data.supportPackage + "\r\nSales Person: " + data.tbcFirst + ' ' + data.tbcLast + "\r\n" + data.tbcEmail + "\r\nVoice Signature ID: " + data.voiceSig + "\r\n" + data.ctechnicalFirst + " " + data.technicalLast +  "\r\n" + data.technicalPhone + "\r\n" + data.technicalEmail,
 			estimatedStart: '2016-06-17T04:21:07Z', 
 			estimatedEnd: '2016-06-17T04:21:07Z',
 		};
